@@ -92,6 +92,7 @@ Returns 200:
 **Key architectural rules:**
 - All read-only extracts load at startup from CSVs + document files.
 - Clearance is *computed* from team/title per policy, not trusted from the roster column (F-01).
+- `policy_access_and_clearance.docx` is a GENERAL-access document despite mentioning the word "restricted" — the discovery log's substring search over-marked it (DECISIONS Q4). The document's own body determines sensitivity, not keyword presence.
 - Follow-ups re-process the ticket; stored answers are audit-only, never replayed (Q6).
 - No authentication on the route; `filed_by` is trusted as the caller's identity (scenario.txt §Deployment).
 - State does not survive Space restart (SQLite on ephemeral disk). Production fix: persistent volume (designed, not built).
@@ -130,7 +131,7 @@ Returns 200:
 | F-03 | Dates must be parsed with 3-parser fallback (ISO, DD Mon YYYY, MM/DD/YYYY); ambiguities resolve MM/DD/YYYY | `ingest/normalize.py` — `parse_date()` | String-sort dates vs parsed dates → different order without 3-parser |
 | F-04 | System must handle 5 CSV files, not 4 (open_tickets.csv is the 5th) | `ingest/csv_loader.py` — `load_all()` | Count CSVs; if design says "4" it's wrong |
 | F-05 | Deprecated services with on-call entries must not crash, but rotation is stale | `engine/routing.py` — `get_oncall()` | Query on-call for deprecated service; crash = wrong |
-| F-06 | Escalation timing: prefer official policy (SEV1=5min, SEV2=15min, SEV3=1bd); mention Payments 3min conflict | `engine/action_decider.py` — `record_decision()` | Hardcoded 10min universal = wrong for SEV1 |
+| F-06 | Escalation timing: use escalation-runbook times (SEV1=5min, SEV2=10min, SEV3=1bd); mention policy (15min) and Payments 3min conflict | `engine/action_decider.py` — `record_decision()` (designed, not built) | Hardcoded 10min universal = wrong per SEV1 policy SLA; test checks design doc, not live enforcement |
 | F-07 | SRE engineers are reachable for on-call even though they own no service | `engine/routing.py` — `get_oncall()` | Restrict on-call to owning-team only → SRE never found |
 | F-08 | Both INC-NNNN and INC-NNNNNN are valid incident IDs; treat uniformly | `ingest/normalize.py` — `normalize_incident_id()` | Single regex `^INC-\d{6}$` fails 6 short IDs |
 | F-09 | Documents are discovered by scanning the store, not only by CSV links | `engine/document_search.py` — `search()` | CSV-only search misses orphan DRAFT postmortems |
@@ -149,20 +150,22 @@ Steps in order for every ticket:
 
 | Kind | Disposition | Steps | What decides outcome |
 |---|---|---|---|
-| **Answerable from document** (filer may see it) | `answered` | Search documents → filter by clearance → cite best match | Document exists + filer clearance allows it. Superseded docs skipped. Drafts allowed, labelled as draft. |
+| **Answerable from document** (filer may see it) | `answered` | Search documents → filter by clearance → cite best match | Document exists + filer clearance allows it. Superseded docs skipped. Drafts allowed, labelled as draft. Superseded status detected by filename suffix `_DRAFT_superseded` or doc body `Status: DRAFT / SUPERSEDED`. Current version is the one with `FINAL` status or the highest version number for that doc family. |
 | **Live problem, already has open live incident** | `duplicate` | Check open incidents for service + symptoms → link as related | Open incident exists with ≥1 non-boilerplate update. No age cutoff. Also `related` the earlier ticket. |
 | **Live problem, no live incident** | `routed` | Find on-call for service → name in `routed_to` | On-call resolved from schedule. If on-call unavailable → route to owning team channel. |
 | **Asks what to do, document answers** | `answered` + `related` | Document search + incident match in `related` | Same as answerable, but still name any open incident in `related`. |
-| **Requests action** (page, open/close incident, grant/change production) | `action_decided` or `refused` | Check authorization → record decision (dry run) | Authorized if filer is engineer in roster for active service. Deprecated services → tell owning team, don't page. |
+| **Requests action** (page, open/close incident, grant/change production) | `action_decided` or `refused` | Check authorization → record decision (dry run) | Authorized if filer is engineer in roster for active service. Exception: close-incident requires owning team or someone who has posted on that incident (DECISIONS Q4). The system never grants clearance and never rolls back, deploys or restarts. Deprecated services → tell owning team, don't page. |
 | **VPN/wifi/all-hands/redirect** | `answered` | No search needed; redirect in `answer` | Matched by classifier keywords. Not `refused`. |
 | **Filer not cleared for document** | `refused` | State document exists + owner; do not quote/paraphrase | Clearance check per doc before any text reaches model or answer. |
 | **Filer not authorized for action** | `refused` | State action not authorized | Filer is not engineer, or service is not active. |
 
-**Live incident rule (DECISIONS Q5):** Open incident with ≥1 non-boilerplate update. No age cutoff. The day counts from C07 are not used (discovery gap not promoted to finding).
+**Live incident rule (DECISIONS Q5):** Open incident with ≥1 non-boilerplate update. "Boilerplate" means any update matching the pattern `"Investigating, no update yet"` (the sole boilerplate variant observed in the 494 open incidents with updates; all others are substantive). No age cutoff. The day counts from C07 are not used (discovery gap not promoted to finding).
 
 **Duplicate check for API-filed tickets:** Same service + same symptoms within 2h of the service's own timestamps, and only after an earlier report was already routed or action-decided.
 
 **Hand-off queue tickets (open_tickets.csv):** 24 tickets with no linked incident are `routed` (not `duplicate`). TCK-0102 (errors/checkout) is `routed`, not duplicate of the latency incident.
+
+**`routed_to` convention:** Contains the on-call engineer's full name (from engineer_roster) when on-call resolves. Contains `"<owning_team> channel"` (e.g. `"Platform channel"`) when on-call is unavailable. Null for all non-routed dispositions.
 
 ---
 
@@ -206,7 +209,7 @@ Steps in order for every ticket:
 
 | Category | Count | Description |
 |---|---|---|
-| A (canary 5xx) | 3+ variants | Answered from runbook + draft postmortem; related to open incident |
+| A (canary 5xx) | 3+ variants | Answered from runbook + draft postmortem; related to open incident. Variants: different filer clearances, different wordings. Also tests F-02 (service name), F-03 (date match), F-08 (incident ID), F-09 (doc discovery of orphan draft). |
 | B (auth-gateway postmortem) — general filer | 2+ | `refused` — Owen/any general filer cannot see restricted postmortem |
 | B (auth-gateway postmortem) — restricted filer | 2+ | `answered` from FINAL postmortem; never superseded draft |
 | C (page on-call, open incident) | 3+ | `action_decided` for non-Payments filer; opens new incident, INC-2101 in `related` |
@@ -215,9 +218,12 @@ Steps in order for every ticket:
 | E (who owns billing-sync) | 2+ | `answered` with owning team |
 | VPN/wifi/all-hands (redirect) | 2+ | `answered` with redirect; not `refused` |
 | Refused — unauthorized action | 2+ | Non-engineer or deprecated service |
-| Follow-up | 2+ | Same ticket_id re-contacted; re-processed |
+| Follow-up | 2+ | Same ticket_id re-contacted; re-processed. Also tests F-04 (hand-off queue ids loaded from 5th CSV accept follow-ups). |
 | Failure / edge cases | 3+ | Identity lookup fails, on-call unavailable, LLM timeout |
-| **Total** | **~30+** | |
+| Data loading (F-04, F-10, F-11) | 3+ | Startup loads all 5 CSVs (open_tickets included, F-04) with CRLF handled (F-10); follow-up on a TCK-id proves the 5th source loaded. Live-incident detection uses the 3-parser on update timestamps (F-11). |
+| **Total** | **~35+** | |
+
+F-06 has no runtime eval case: escalation timers are design-only in this build (Q9). Its rule and test live in §5, and the §8 limits row records the chosen values.
 
 ### Bars (fixed, DECISIONS Q8)
 
