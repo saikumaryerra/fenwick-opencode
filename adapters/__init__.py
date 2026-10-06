@@ -1,0 +1,1 @@
+"""Adapters — one per external system behind interfaces, with failure and timeout support."""

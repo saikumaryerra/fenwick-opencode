@@ -1,0 +1,26 @@
+[C01]
+   OK  'identify filer'
+   OK  'compute clearance'
+   OK  'classify ticket'
+   MISS 'check action authorization'
+   matched=False
+[D01]
+   OK  'identify filer'
+   OK  'compute clearance'
+   OK  'classify ticket'
+   MISS 'check open incidents'
+   matched=False
+[E01]
+   OK  'identify filer'
+   OK  'compute clearance'
+   OK  'classify ticket'
+   MISS 'look up service ownership'
+   matched=False
+[FA02]
+   OK  'identify filer'
+   OK  'compute clearance'
+   OK  'classify ticket'
+   MISS 'check open incidents'
+   OK  'check duplicate tickets'
+   MISS 'route to on-call'
+   matched=False

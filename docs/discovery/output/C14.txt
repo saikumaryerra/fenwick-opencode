@@ -1,0 +1,72 @@
+
+======================================================================
+[C01] disposition=action_decided routed_to=None
+PLAN:
+   'Identify filer'   why='Look up who filed the ticket in the identity direc'
+   'Compute clearance'   why="Determine filer's clearance level from team and ti"
+   'Classify ticket'   why='Determine ticket kind, services, and action reques'
+   'Check action authorization'   why='Verify filer is authorized for the requested actio'
+STEPS_RUN:
+   tool='identify_filer' outcome=ok detail='Found Marisol Feng (FEN-1003)'
+   tool='compute_clearance' outcome=ok detail='Clearance: general'
+   tool='classify_ticket' outcome=ok detail='Kind: requests_action'
+   tool='record_decision' outcome=ok detail="Action 'page_oncall' recorded (dry-run)"
+   tool='check_authorization' outcome=ok detail='Filer is on Payments, authorised for page_oncall on payments'
+
+======================================================================
+[D01] disposition=duplicate routed_to=None
+PLAN:
+   'Identify filer'   why='Look up who filed the ticket in the identity direc'
+   'Compute clearance'   why="Determine filer's clearance level from team and ti"
+   'Classify ticket'   why='Determine ticket kind, services, and action reques'
+   'Check open incidents'   why='Look for matching open/live incidents'
+STEPS_RUN:
+   tool='identify_filer' outcome=ok detail='Found Marisol Feng (FEN-1003)'
+   tool='compute_clearance' outcome=ok detail='Clearance: general'
+   tool='classify_ticket' outcome=ok detail='Kind: live_problem'
+   tool='check_incidents' outcome=ok detail='Found 1 live matching incident(s)'
+
+======================================================================
+[E01] disposition=answered routed_to=None
+PLAN:
+   'Identify filer'   why='Look up who filed the ticket in the identity direc'
+   'Compute clearance'   why="Determine filer's clearance level from team and ti"
+   'Classify ticket'   why='Determine ticket kind, services, and action reques'
+   'Look up service ownership'   why='Find owning team from service registry'
+STEPS_RUN:
+   tool='identify_filer' outcome=ok detail='Found Aiko Renner (FEN-1006)'
+   tool='compute_clearance' outcome=ok detail='Clearance: general'
+   tool='classify_ticket' outcome=ok detail='Kind: ownership_query'
+   tool='lookup_ownership' outcome=ok detail='billing-sync owned by Billing'
+ANSWER: "The service 'billing-sync' is owned by the **Billing** team and is currently **active**."
+
+======================================================================
+[FA02] disposition=routed routed_to='Tomas Ilic'
+PLAN:
+   'Identify filer'   why='Look up who filed the ticket in the identity direc'
+   'Compute clearance'   why="Determine filer's clearance level from team and ti"
+   'Classify ticket'   why='Determine ticket kind, services, and action reques'
+   'Check open incidents'   why='Look for matching open/live incidents'
+   'Check duplicate tickets'   why='Look for same-service same-symptom tickets within '
+   'Route to on-call'   why='Find on-call engineer for billing-worker'
+STEPS_RUN:
+   tool='identify_filer' outcome=ok detail='Found Aiko Renner (FEN-1006)'
+   tool='compute_clearance' outcome=ok detail='Clearance: general'
+   tool='classify_ticket' outcome=ok detail='Kind: live_problem'
+   tool='check_incidents' outcome=ok detail='Found open incidents but none are live'
+   tool='check_duplicate' outcome=ok detail='No duplicates found'
+   tool='route_to_oncall' outcome=ok detail='Routed to Tomas Ilic'
+
+======================================================================
+[B01] disposition=refused routed_to=None
+PLAN:
+   'Identify filer'   why='Look up who filed the ticket in the identity direc'
+   'Compute clearance'   why="Determine filer's clearance level from team and ti"
+   'Classify ticket'   why='Determine ticket kind, services, and action reques'
+   'Search documents'   why='Find relevant documents by keyword matching'
+STEPS_RUN:
+   tool='identify_filer' outcome=ok detail='Found Marisol Feng (FEN-1003)'
+   tool='compute_clearance' outcome=ok detail='Clearance: general'
+   tool='classify_ticket' outcome=ok detail='Kind: answerable'
+   tool='search_documents' outcome=failed detail='Restricted document(s) exist but require higher clearance: p'
+ANSWER (refused): 'A document matching your query exists but requires restricted clearance to view. Please contact your team lead or the document owner if you need access.'

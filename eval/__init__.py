@@ -1,0 +1,1 @@
+"""Evaluation framework — cases, runner, and bar checks per BRIEFING.md §9."""
