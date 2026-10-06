@@ -1,0 +1,52 @@
+=== open_tickets.csv profile ===
+Rows: 25  |  Columns: 5 (ticket_id, filed_by, filed_at, text, related_incident_id)
+
+--- 1. Completeness ---
+  ticket_id: 0 empty
+  filed_by: 0 empty
+  filed_at: 0 empty
+  text: 0 empty
+  related_incident_id: 24 empty
+  related_incident_id blank: 24
+
+--- 2. Validity ---
+  ticket_id formats: {'TCK-NNNN': 25}
+  filed_by formats: {'FEN-NNNN': 25}
+  filed_at unparseable ISO8601: 0
+  related_incident_id formats: {'INC-NNNN': 1}
+
+--- 3. Uniqueness ---
+  Duplicate ticket_id: 0 
+  Duplicate rows: 0
+
+--- 4. Consistency ---
+  All related_incident_ids start with INC- — format consistent.
+
+--- 5. Integrity ---
+  filed_by not in engineer_roster: [] (all OK)
+  related_incident_id not in incident_log: [] (all OK)
+
+--- 6. Timeliness ---
+  Filed date range: [2026-09-02T09:15:00] — [2026-09-07T14:31:00]
+  Latest is 2026-09-07T17:13:00 — matches 'as of hand-off' description
+
+--- 7. Distribution ---
+  Filed_by distribution:
+    FEN-1001: 1
+    FEN-1002: 2
+    FEN-1003: 4
+    FEN-1004: 1
+    FEN-1005: 2
+    FEN-1006: 2
+    FEN-1007: 1
+    FEN-1008: 3
+    FEN-1009: 1
+    FEN-1010: 1
+    FEN-1011: 2
+    FEN-1012: 1
+    FEN-1013: 2
+    FEN-1014: 2
+  Tickets with related_incident_id: 1/25
+
+=== Profile complete ===
+  Timestamp: 2026-10-06 12:26

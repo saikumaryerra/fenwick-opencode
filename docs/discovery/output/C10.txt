@@ -1,0 +1,195 @@
+=== Updates field audit ===
+Total rows: 50000
+Rows with updates: 494
+Rows without updates: 49506
+
+--- Consistency: status vs updates ---
+  'open' status rows with NO updates: 0
+  'resolved' status rows WITH updates: 0
+
+--- Timestamp formats in updates ---
+  MM/DD/YYYYTHH:MM:SS (nonstandard): 187
+  ISO8601: 159
+  OTHER: 27 Jul 2026T15:00:00: 2
+  OTHER: 01 Jan 2026T09:00:00: 1
+  OTHER: 09 Sep 2024T12:00:00: 1
+  OTHER: 07 Jan 2024T15:00:00: 1
+  OTHER: 26 Jul 2026T16:00:00: 1
+  OTHER: 17 Apr 2025T14:00:00: 1
+  OTHER: 18 Sep 2025T12:00:00: 1
+  OTHER: 05 Mar 2026T16:00:00: 1
+  OTHER: 17 Jun 2026T11:00:00: 1
+  OTHER: 10 Jul 2026T11:00:00: 1
+  OTHER: 17 Oct 2024T11:00:00: 1
+  OTHER: 16 Sep 2025T13:00:00: 1
+  OTHER: 14 May 2026T12:00:00: 1
+  OTHER: 28 May 2024T12:00:00: 1
+  OTHER: 23 Jun 2024T14:00:00: 1
+  OTHER: 27 Jan 2025T10:00:00: 1
+  OTHER: 23 Dec 2024T10:00:00: 1
+  OTHER: 07 Mar 2026T10:00:00: 1
+  OTHER: 06 Jun 2026T09:00:00: 1
+  OTHER: 01 Aug 2024T09:00:00: 1
+  OTHER: 22 Oct 2024T14:00:00: 1
+  OTHER: 24 Sep 2024T11:00:00: 1
+  OTHER: 04 May 2024T16:00:00: 1
+  OTHER: 07 Feb 2024T09:00:00: 1
+  OTHER: 03 Jan 2026T12:00:00: 1
+  OTHER: 14 Aug 2026T16:00:00: 1
+  OTHER: 19 Jul 2026T12:00:00: 1
+  OTHER: 04 Apr 2024T15:00:00: 1
+  OTHER: 15 Dec 2024T09:00:00: 1
+  OTHER: 20 Apr 2025T15:00:00: 1
+  OTHER: 28 Jul 2024T11:00:00: 1
+  OTHER: 01 Jan 2026T16:00:00: 1
+  OTHER: 25 Aug 2025T12:00:00: 1
+  OTHER: 01 Mar 2025T10:00:00: 1
+  OTHER: 11 Jun 2026T10:00:00: 1
+  OTHER: 03 Jan 2024T16:00:00: 1
+  OTHER: 14 Feb 2026T15:00:00: 1
+  OTHER: 21 Dec 2024T13:00:00: 1
+  OTHER: 03 Aug 2025T15:00:00: 1
+  OTHER: 25 Aug 2024T12:00:00: 1
+  OTHER: 13 Apr 2024T09:00:00: 1
+  OTHER: 01 Oct 2024T10:00:00: 1
+  OTHER: 10 Jan 2024T10:00:00: 1
+  OTHER: 26 Feb 2026T14:00:00: 1
+  OTHER: 08 Jul 2026T11:00:00: 1
+  OTHER: 11 Aug 2025T13:00:00: 1
+  OTHER: 09 Aug 2026T14:00:00: 1
+  OTHER: 05 May 2024T13:00:00: 1
+  OTHER: 22 Sep 2025T16:00:00: 1
+  OTHER: 27 Aug 2026T14:00:00: 1
+  OTHER: 27 Jul 2026T14:00:00: 1
+  OTHER: 12 Feb 2026T10:00:00: 1
+  OTHER: 14 Dec 2024T09:00:00: 1
+  OTHER: 01 Jun 2025T13:00:00: 1
+  OTHER: 03 Jun 2025T10:00:00: 1
+  OTHER: 14 May 2024T15:00:00: 1
+  OTHER: 13 Aug 2026T13:00:00: 1
+  OTHER: 07 Feb 2025T09:00:00: 1
+  OTHER: 21 Dec 2025T14:00:00: 1
+  OTHER: 02 Dec 2025T15:00:00: 1
+  OTHER: 22 Nov 2024T13:00:00: 1
+  OTHER: 03 Sep 2024T12:00:00: 1
+  OTHER: 04 Apr 2025T14:00:00: 1
+  OTHER: 01 Apr 2025T13:00:00: 1
+  OTHER: 03 Jun 2024T09:00:00: 1
+  OTHER: 11 Jan 2026T12:00:00: 1
+  OTHER: 23 Jan 2024T16:00:00: 1
+  OTHER: 28 Aug 2025T11:00:00: 1
+  OTHER: 09 Feb 2026T16:00:00: 1
+  OTHER: 21 Jan 2026T16:00:00: 1
+  OTHER: 26 Sep 2026T16:00:00: 1
+  OTHER: 28 Nov 2024T16:00:00: 1
+  OTHER: 09 Jan 2024T11:00:00: 1
+  OTHER: 01 Apr 2025T12:00:00: 1
+  OTHER: 05 Apr 2024T12:00:00: 1
+  OTHER: 21 Jun 2024T16:00:00: 1
+  OTHER: 22 Jun 2025T13:00:00: 1
+  OTHER: 01 Aug 2026T13:00:00: 1
+  OTHER: 28 Feb 2026T13:00:00: 1
+  OTHER: 07 Mar 2026T11:00:00: 1
+  OTHER: 21 Sep 2026T10:00:00: 1
+  OTHER: 05 Aug 2026T13:00:00: 1
+  OTHER: 28 Jul 2024T10:00:00: 1
+  OTHER: 22 May 2026T16:00:00: 1
+  OTHER: 27 Jan 2025T15:00:00: 1
+  OTHER: 08 Jun 2026T16:00:00: 1
+  OTHER: 23 Sep 2025T09:00:00: 1
+  OTHER: 03 Jan 2026T09:00:00: 1
+  OTHER: 23 Feb 2025T15:00:00: 1
+  OTHER: 26 Jun 2025T11:00:00: 1
+  OTHER: 19 Apr 2025T14:00:00: 1
+  OTHER: 13 Dec 2024T11:00:00: 1
+  OTHER: 03 Sep 2026T12:00:00: 1
+  OTHER: 13 Oct 2024T12:00:00: 1
+  OTHER: 05 Oct 2025T09:00:00: 1
+  OTHER: 13 Feb 2026T12:00:00: 1
+  OTHER: 09 May 2024T16:00:00: 1
+  OTHER: 22 Apr 2024T14:00:00: 1
+  OTHER: 19 Nov 2024T15:00:00: 1
+  OTHER: 01 May 2024T13:00:00: 1
+  OTHER: 06 Nov 2025T16:00:00: 1
+  OTHER: 10 Jun 2026T14:00:00: 1
+  OTHER: 21 Sep 2024T15:00:00: 1
+  OTHER: 06 Dec 2025T13:00:00: 1
+  OTHER: 15 Jul 2026T13:00:00: 1
+  OTHER: 27 Apr 2025T14:00:00: 1
+  OTHER: 09 May 2026T16:00:00: 1
+  OTHER: 16 Jan 2025T14:00:00: 1
+  OTHER: 12 Oct 2025T13:00:00: 1
+  OTHER: 11 Jul 2026T10:00:00: 1
+  OTHER: 14 Feb 2026T10:00:00: 1
+  OTHER: 18 Jul 2025T15:00:00: 1
+  OTHER: 15 Aug 2025T14:00:00: 1
+  OTHER: 05 Mar 2026T11:00:00: 1
+  OTHER: 05 Sep 2026T11:00:00: 1
+  OTHER: 15 Sep 2024T12:00:00: 1
+  OTHER: 15 Apr 2026T09:00:00: 1
+  OTHER: 20 Apr 2026T13:00:00: 1
+  OTHER: 10 Jun 2025T11:00:00: 1
+  OTHER: 10 Mar 2025T12:00:00: 1
+  OTHER: 04 Sep 2026T16:00:00: 1
+  OTHER: 06 Dec 2024T15:00:00: 1
+  OTHER: 12 Feb 2026T12:00:00: 1
+  OTHER: 28 Aug 2026T16:00:00: 1
+  OTHER: 02 May 2024T13:00:00: 1
+  OTHER: 03 Feb 2024T12:00:00: 1
+  OTHER: 23 Mar 2026T16:00:00: 1
+  OTHER: 18 Jul 2024T13:00:00: 1
+  OTHER: 28 May 2026T13:00:00: 1
+  OTHER: 02 Jul 2024T10:00:00: 1
+  OTHER: 13 Sep 2026T14:00:00: 1
+  OTHER: 16 May 2024T13:00:00: 1
+  OTHER: 28 May 2025T10:00:00: 1
+  OTHER: 25 Jul 2024T12:00:00: 1
+  OTHER: 20 Feb 2026T11:00:00: 1
+  OTHER: 06 Jan 2025T13:00:00: 1
+  OTHER: 03 Feb 2024T15:00:00: 1
+  OTHER: 02 Feb 2024T16:00:00: 1
+  OTHER: 08 Jun 2024T09:00:00: 1
+  OTHER: 19 Apr 2026T12:00:00: 1
+  OTHER: 27 Jan 2025T11:00:00: 1
+  OTHER: 27 Jul 2024T09:00:00: 1
+  OTHER: 20 Sep 2024T13:00:00: 1
+  OTHER: 04 Jun 2024T13:00:00: 1
+  OTHER: 02 Aug 2026T09:00:00: 1
+  OTHER: 14 Jan 2026T15:00:00: 1
+  OTHER: 02 Feb 2024T12:00:00: 1
+  OTHER: 08 Jul 2024T10:00:00: 1
+  OTHER: 21 Apr 2025T10:00:00: 1
+
+--- Entry counts per row ---
+  1 entries: 492 row(s)
+  2 entries: 2 row(s)
+
+--- Emp ID issues ---
+  FEN-NNNN format violations: 0
+  Empty notes: 0
+
+--- Sample updates ---
+  ID INC-009012 (open): [2025-02-26T13:00:00|FEN-1013|Investigating, no update yet]
+  ID INC-009054 (open): [2025-09-18T15:00:00|FEN-1013|Investigating, no update yet]
+  ID INC-009125 (open): [07/06/2026T14:00:00|FEN-1014|Investigating, no update yet]
+  ID INC-009164 (open): [08/16/2024T13:00:00|FEN-1011|Investigating, no update yet]
+  ID INC-009328 (open): [01 Jan 2026T09:00:00|FEN-1007|Investigating, no update yet]
+
+============================================================
+Postmortem doc linked vs available on disk
+  Files ON DISK (6):
+    postmortem_auth_gateway_outage_DRAFT_superseded.docx
+    postmortem_auth_gateway_outage_FINAL.docx
+    postmortem_billing_worker_duplicate_charges.docx
+    postmortem_payments_api_5xx_2026-06-11.docx
+    postmortem_payments_api_canary_2026-09-04_DRAFT.docx
+    postmortem_search_index_reindex_lag_2026-08-02.docx
+  Files LINKED from CSV (4):
+    postmortem_auth_gateway_outage_FINAL.docx
+    postmortem_billing_worker_duplicate_charges.docx
+    postmortem_payments_api_5xx_2026-06-11.docx
+    postmortem_search_index_reindex_lag_2026-08-02.docx
+  ORPHAN docs (on disk, not linked): ['postmortem_auth_gateway_outage_DRAFT_superseded.docx', 'postmortem_payments_api_canary_2026-09-04_DRAFT.docx']
+  MISSING docs (linked, not on disk): []
+
+=== End updates + postmortem audit ===

@@ -1,0 +1,33 @@
+=== service_registry.csv profile ===
+Rows: 10  |  Columns: 4 (service_name, owning_team, status, description)
+
+--- 1. Completeness ---
+  service_name: 0 empty
+  owning_team: 0 empty
+  status: 0 empty
+  description: 0 empty
+
+--- 2. Validity ---
+  service_name patterns: {'lowercase-hyphenated': 10}
+  owning_team values: {'Payments': 2, 'Billing': 2, 'Platform': 5, 'Security': 1}
+  status values: {'active': 9, 'deprecated': 1}
+
+--- 3. Uniqueness ---
+  Duplicate service_name: 0 
+
+--- 4. Consistency ---
+  Teams outside {Payments,Billing,Platform,Security,SRE}: []
+
+--- 5. Integrity ---
+  service_name is the canonical name — referenced by other files via service_name_raw
+
+--- 6. Timeliness ---
+  No timestamp. Data is a snapshot. scenario.txt: 'Authoritative for what exists'
+
+--- 7. Distribution ---
+  Status distribution: {'active': 9, 'deprecated': 1}
+  Team distribution: {'Payments': 2, 'Billing': 2, 'Platform': 5, 'Security': 1}
+  Deprecated services: ['notifications-worker']
+
+=== Profile complete ===
+  Timestamp: 2026-10-06 12:26

@@ -1,0 +1,41 @@
+=== engineer_roster.csv profile ===
+Rows: 14  |  Columns: 5 (emp_id, name, team, title, clearance_tier)
+As-of: shipped with pack, no timestamp column
+
+--- 1. Completeness (missing/empty values) ---
+  emp_id: 0 empty
+  name: 0 empty
+  team: 0 empty
+  title: 0 empty
+  clearance_tier: 0 empty
+  Any field empty: 0 rows
+
+--- 2. Validity (format classes per column) ---
+  emp_id formats: {'FEN-NNNN': 14}
+  team values: {'Payments': 3, 'Billing': 3, 'Platform': 3, 'Security': 2, 'SRE': 3}
+  title values: {'Senior Software Engineer': 2, 'Software Engineer': 6, 'Staff Software Engineer': 1, 'Security Engineer': 1, 'Senior Security Engineer': 1, 'Senior SRE': 1, 'SRE': 2}
+  clearance_tier values: {'restricted': 7, 'general': 7}
+
+--- 3. Uniqueness ---
+  Duplicate emp_id: 0
+  Duplicate rows: 0
+
+--- 4. Consistency ---
+  No cross-field consistency rules for this table
+
+--- 5. Integrity ---
+  emp_id is the PK — no FK columns in this table
+
+--- 6. Timeliness ---
+  No timestamp column. Data is a snapshot.
+  As-of: shipped with pack. Changes slowly per scenario.txt.
+
+--- 7. Distribution ---
+  Teams: {'Payments': 3, 'Billing': 3, 'Platform': 3, 'Security': 2, 'SRE': 3}
+  Clearance: Counter({'restricted': 7, 'general': 7})
+  Titles: {'Senior Software Engineer': 2, 'Software Engineer': 6, 'Staff Software Engineer': 1, 'Security Engineer': 1, 'Senior Security Engineer': 1, 'Senior SRE': 1, 'SRE': 2}
+  Restricted: 7/14 (50%)
+  General: 7/14
+
+=== Profile complete ===
+  Timestamp: 2026-10-06 12:26

@@ -1,0 +1,47 @@
+=== Date format crisis in incident_log.csv ===
+Total rows: 50000
+
+--- Format breakdown ---
+  ISO (YYYY-MM-DD): 16668 (33.3%)
+  DD Mon YYYY (e.g. 28 May 2025): 16666 (33.3%)
+  MM/DD/YYYY: 16666 (33.3%)
+
+--- Distribution by year ---
+  2024:
+    DD Mon YYYY (e.g. 28 May 2025): 5643
+    ISO (YYYY-MM-DD): 5650
+    MM/DD/YYYY: 5603
+  2025:
+    DD Mon YYYY (e.g. 28 May 2025): 5469
+    ISO (YYYY-MM-DD): 5565
+    MM/DD/YYYY: 5537
+  2026:
+    DD Mon YYYY (e.g. 28 May 2025): 5554
+    ISO (YYYY-MM-DD): 5453
+    MM/DD/YYYY: 5526
+
+--- Impact analysis ---
+  All 3 formats appear throughout — they are NOT segregated by year.
+  => Any query that sorts, filters, or compares dates will be incorrect
+     unless the date is parsed format-by-format.
+  => A system consuming this must attempt all 3 parsers and validate.
+
+--- Ambiguity risk in MM/DD/YYYY ---
+  Total slash-format dates: 16666
+  Ambiguous (both parts <=12, could be DD/MM or MM/DD): 7085
+
+--- Samples per format ---
+  ISO (YYYY-MM-DD):
+    '2025-04-26'
+    '2025-10-12'
+    '2025-10-03'
+  DD Mon YYYY (e.g. 28 May 2025):
+    '28 May 2025'
+    '04 Jan 2026'
+    '06 Dec 2025'
+  MM/DD/YYYY:
+    '03/12/2024'
+    '02/13/2024'
+    '05/04/2025'
+
+=== End date analysis ===

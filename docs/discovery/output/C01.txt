@@ -1,0 +1,64 @@
+=== D-01 hypotheses ===
+Date: 2026-10-06 12:26
+Source: scenario.txt, DATA_DICTIONARY.md
+
+H1  | There are exactly 4 CSV files shipped alongside documents/
+    | (scenario.txt: 'The dumps ship as documents/ plus four CSVs')
+
+H2  | open_tickets.csv is a snapshot of open tickets at hand-off
+    | (DATA_DICTIONARY: 'One row per ticket currently open in the queue, as of hand-off')
+
+H3  | engineer_roster.emp_id is unique and authoritative for employee identity
+    | (DATA_DICTIONARY: 'FK reference', scenario: 'Authoritative for who someone is')
+
+H4  | service_registry.service_name is the canonical service name
+    | (DATA_DICTIONARY: 'canonical service name')
+
+H5  | oncall_schedule.service_name_raw can be joined to service_registry.service_name
+    | (DATA_DICTIONARY: 'service name as written in the on-call tool export')
+
+H6  | incident_log.incident_id is unique: one row per logged incident
+    | (DATA_DICTIONARY: 'One row per logged incident')
+
+H7  | incident_log.postmortem_doc references a filename in documents/postmortems/
+    | (DATA_DICTIONARY: 'filename of the postmortem document')
+
+H8  | incident_log.updates uses the format ISO8601-timestamp|emp_id|note, ;-separated
+    | (DATA_DICTIONARY: 'each entry is ISO8601-timestamp|emp_id|note, ;-separated')
+
+H9  | incident_log.date format is consistently ISO 8601 (YYYY-MM-DD)
+    | (implied by ISO8601 use elsewhere, though DATA_DICTIONARY just says 'incident date')
+
+H10 | open_tickets.related_incident_id FK resolves to incident_log.incident_id when non-blank
+    | (DATA_DICTIONARY: 'FK to incident_log.incident_id')
+
+H11 | Every service that appears in oncall_schedule also exists in service_registry
+    | (implied: on-call assignments are for operated services)
+
+H12 | Every service in incident_log also appears in service_registry
+    | (implied: incidents are for operated services)
+
+H13 | clearance_tier in engineer_roster has exactly the values 'general' and 'restricted'
+    | (DATA_DICTIONARY: 'general or restricted, as provisioned by IT')
+
+H14 | Documents in documents/postmortems/ that are linked via postmortem_doc exist on disk
+    | (implied by DATA_DICTIONARY description)
+
+H15 | A postmortem doc that exists on disk but is not linked via postmortem_doc is expected
+    | (DATA_DICTIONARY: 'a document can exist before or without that link being made')
+
+H16 | 'Messaging and paging ships no dump' (DATA_DICTIONARY)
+    | (confirmed by absence)
+
+H17 | oncall_schedule.currently_active has only 'true'/'false' values
+    | (DATA_DICTIONARY: 'true if this is the current on-call shift')
+
+H18 | Each ticket type (A-E scenario examples) maps to a disposition
+    | (scenario: each scenario needs different handling)
+
+H19 | The document store files are readable .docx format
+    | (implied by 'hundreds to thousands of documents, growing')
+
+H20 | open_tickets.ticket_id is unique
+    | (DATA_DICTIONARY: 'ticket identifier', implies PK)
+

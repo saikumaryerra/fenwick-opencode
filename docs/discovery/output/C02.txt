@@ -1,0 +1,87 @@
+=== Inventory: fenwick-data-pack ===
+Date: 2026-10-06 12:26
+
+--- CSV files ---
+File: engineer_roster.csv
+  Size (bytes): 852
+  Lines: 15
+  Encoding: CSV ASCII text
+  Line endings: CRLF (\r\n)
+  Columns: 5
+  Header: emp_id,name,team,title,clearance_tier
+
+File: incident_log.csv
+  Size (bytes): 5919464
+  Lines: 50001
+  Encoding: CSV ASCII text
+  Line endings: CRLF (\r\n)
+  Columns: 8
+  Header: incident_id,service_name_raw,date,severity,status,one_line_summary,postmortem_doc,updates
+
+File: oncall_schedule.csv
+  Size (bytes): 855
+  Lines: 16
+  Encoding: CSV ASCII text
+  Line endings: CRLF (\r\n)
+  Columns: 4
+  Header: service_name_raw,engineer_emp_id,currently_active,rotation_note
+
+File: open_tickets.csv
+  Size (bytes): 2393
+  Lines: 26
+  Encoding: CSV ASCII text
+  Line endings: CRLF (\r\n)
+  Columns: 5
+  Header: ticket_id,filed_by,filed_at,text,related_incident_id
+
+File: service_registry.csv
+  Size (bytes): 966
+  Lines: 11
+  Encoding: CSV ASCII text
+  Line endings: CRLF (\r\n)
+  Columns: 4
+  Header: service_name,owning_team,status,description
+
+--- Documents (docx) ---
+Directory: documents/runbooks/
+  payments_team_notes_rollback.docx | 36965 bytes | Microsoft Word 2007+
+  runbook_database_failover.docx | 37278 bytes | Microsoft Word 2007+
+  runbook_oncall_escalation.docx | 37311 bytes | Microsoft Word 2007+
+  runbook_rollback_billing_worker.docx | 37313 bytes | Microsoft Word 2007+
+  runbook_rollback_checkout_service.docx | 37373 bytes | Microsoft Word 2007+
+  runbook_rollback_payments_api.docx | 37484 bytes | Microsoft Word 2007+
+
+Directory: documents/postmortems/
+  postmortem_auth_gateway_outage_DRAFT_superseded.docx | 37588 bytes | Microsoft Word 2007+
+  postmortem_auth_gateway_outage_FINAL.docx | 37822 bytes | Microsoft Word 2007+
+  postmortem_billing_worker_duplicate_charges.docx | 37469 bytes | Microsoft Word 2007+
+  postmortem_payments_api_5xx_2026-06-11.docx | 37464 bytes | Microsoft Word 2007+
+  postmortem_payments_api_canary_2026-09-04_DRAFT.docx | 37713 bytes | Microsoft Word 2007+
+  postmortem_search_index_reindex_lag_2026-08-02.docx | 37517 bytes | Microsoft Word 2007+
+
+Directory: documents/policies/
+  policy_access_and_clearance.docx | 37712 bytes | Microsoft Word 2007+
+  policy_oncall_rotation.docx | 37227 bytes | Microsoft Word 2007+
+
+--- DATA_DICTIONARY.md ---
+  Size: 3128 bytes
+  Lines: 70
+
+--- scenario.txt ---
+  Size: 12707 bytes
+  Lines: 122
+
+--- AGENTS.md ---
+  Size: 11620 bytes
+  Lines: 610
+
+--- Total file count ---
+  CSV files: 5
+  Runbooks (docx): 6
+  Postmortems (docx): 6
+  Policies (docx): 2
+  Total docx: 14
+
+--- Surprise check: 4 CSVs claimed vs 5 found ---
+  scenario.txt says 'four CSVs' but there are 5 .csv files.
+  H1 is FALSE.

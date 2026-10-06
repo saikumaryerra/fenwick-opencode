@@ -1,0 +1,64 @@
+=== Service name variant analysis ===
+
+--- Canonical names (service_registry) ---
+  auth-gateway  [Platform]
+  billing-sync  [Billing]
+  billing-worker  [Billing]
+  checkout-service  [Payments]
+  edge-gateway  [Platform]
+  fraud-detection-worker  [Security]
+  notifications-worker  [Platform]
+  payments-api  [Payments]
+  primary-db  [Platform]
+  search-index  [Platform]
+
+--- oncall_schedule names ---
+  Total distinct: 11
+  'Payments-API' | exact=MISMATCH | normalizes=YES
+  'auth_gateway' | exact=MISMATCH | normalizes=YES
+  'billing-sync' | exact=EXACT | normalizes=YES
+  'billing-worker' | exact=EXACT | normalizes=YES
+  'checkout-service' | exact=EXACT | normalizes=YES
+  'edge-gateway' | exact=EXACT | normalizes=YES
+  'fraud-detection-worker' | exact=EXACT | normalizes=YES
+  'notifications-worker' | exact=EXACT | normalizes=YES
+  'payments-api' | exact=EXACT | normalizes=YES
+  'primary-db' | exact=EXACT | normalizes=YES
+  'search-index' | exact=EXACT | normalizes=YES
+
+--- incident_log service names ---
+  'billing-worker' (5001 rows) — EXACT match
+  'primary-db' (5000 rows) — EXACT match
+  'search-index' (5000 rows) — EXACT match
+  'checkout-service' (5000 rows) — EXACT match
+  'notifications-worker' (4999 rows) — EXACT match
+  'billing-sync' (4999 rows) — EXACT match
+  'fraud-detection-worker' (4999 rows) — EXACT match
+  'edge-gateway' (4999 rows) — EXACT match
+  'payments-api' (1668 rows) — EXACT match
+  'Payments-API' (1668 rows) — Normalizes to canonical (case/hyphen/underscore diff)
+  'auth_gateway' (1668 rows) — Normalizes to canonical (case/hyphen/underscore diff)
+  'auth-gateway' (1667 rows) — EXACT match
+  'payments_api' (1666 rows) — Normalizes to canonical (case/hyphen/underscore diff)
+  'Auth-Gateway' (1666 rows) — Normalizes to canonical (case/hyphen/underscore diff)
+
+--- Variant groups (by canonical) ---
+  Canonical 'auth-gateway': ['Auth-Gateway', 'auth-gateway', 'auth_gateway']
+  Canonical 'billing-sync': ['billing-sync']
+  Canonical 'billing-worker': ['billing-worker']
+  Canonical 'checkout-service': ['checkout-service']
+  Canonical 'edge-gateway': ['edge-gateway']
+  Canonical 'fraud-detection-worker': ['fraud-detection-worker']
+  Canonical 'notifications-worker': ['notifications-worker']
+  Canonical 'payments-api': ['Payments-API', 'payments-api', 'payments_api']
+  Canonical 'primary-db': ['primary-db']
+  Canonical 'search-index': ['search-index']
+
+=== Summary ===
+  incident_log rows with exact match: 43332/50000 (86%)
+  incident_log rows normalizable: 50000/50000 (100%)
+  incident_log rows with NO match at all: 0/50000 (must be inspected)
+  Unmatched names: []
+  oncall_schedule exact match: 9/11
+  oncall_schedule normalizable: 11/11
+  Unmatched oncall names: []

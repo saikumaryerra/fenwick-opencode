@@ -1,0 +1,54 @@
+=== Scenario ticket mapping (A-E) ===
+
+--- Ticket D: checkout latency (scenario example) ---
+  Matching tickets: 1
+    TCK-0101 | FEN-1003 | 2026-09-07T14:31:00 | related_inc=INC-2115
+    -> Related incident: INC-2115 (open, SEV2): Checkout latency climbing since roughly 14:20; investigating downstream dependency
+       Updates: 2026-09-07T14:20:00|FEN-1003|Checkout latency climbing since ~14:20, investigating;2026-09-07T14:45:00|FEN-1003|Correlated with a downstream dependency slowdown, still open
+
+--- Ticket B: March auth-gateway outage ---
+  Tickets about auth-gateway: 2
+    TCK-0106 | can someone check why auth-gateway is throwing errors
+    TCK-0115 | auth-gateway looks slow, is anyone already on this
+  Postmortems about auth-gateway:
+    postmortem_auth_gateway_outage_DRAFT_superseded.docx
+    postmortem_auth_gateway_outage_FINAL.docx
+
+--- Ticket A: payments-api canary 5xx ---
+  Tickets about payments-api: 3
+    TCK-0103 | what's the rollback runbook for payments-api
+    TCK-0112 | quick question about payments-api on-call rotation
+    TCK-0121 | need access to the payments-api restricted docs, who do I ask
+  Postmortems about payments-api:
+    postmortem_payments_api_5xx_2026-06-11.docx
+    postmortem_payments_api_canary_2026-09-04_DRAFT.docx
+
+--- Ticket C: on-call for payments-api ---
+  Current on-call for payments-api: FEN-1001 (Week 36 primary)
+  Engineer FEN-1001: Priya Nathan, Payments, Senior Software Engineer
+
+--- Ticket E: who owns billing-sync ---
+  Service: billing-sync | Owner: Billing | Status: active
+
+=== Cross-file consistency ===
+
+--- On-call engineers in roster ---
+  On-call engineers not in roster: set() (none)
+
+--- Ticket filers in roster ---
+  Ticket filers not in roster: set() (none)
+
+--- Team names match between roster and registry ---
+  Roster teams: ['Billing', 'Payments', 'Platform', 'SRE', 'Security']
+  Registry teams: ['Billing', 'Payments', 'Platform', 'Security']
+  Symmetric difference: {'SRE'} 
+
+--- Incident severity by status ---
+  SEV1/open: 20
+  SEV1/resolved: 2472
+  SEV2/open: 123
+  SEV2/resolved: 12439
+  SEV3/open: 351
+  SEV3/resolved: 34595
+
+=== End scenario mapping ===
