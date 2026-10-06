@@ -1,0 +1,122 @@
+Fenwick Cloud — Engineering Support Queue
+The scenario
+Fenwick Cloud — Engineering Support Queue
+The scenario
+You are joining Fenwick Cloud, a company running a workflow-automation platform for other businesses, on the team responsible for internal engineering tooling. The head of engineering, in her own words:
+
+"My team gets forty of these a day. Half are things we've already answered somewhere, or already have an open incident for, and somebody still burns ten minutes finding that out. The other half need a real person, and more often than not the wrong person gets pulled in. Some of what's in our docs shouldn't be visible to whoever happens to ask, and today that's held together by folder conventions, not anything real. I want something that takes the queue off my team, shows its work, and doesn't leak what it isn't supposed to. And I don't want a surprise bill at the end of the month once the whole org is on it, not just one team."
+
+Your task
+Design a system that runs Fenwick's engineering support queue, and build enough of it to prove the design works.
+
+Those are two things at two different depths, and we mean both literally.
+
+The design is unconstrained — what you would actually put into production. Every system it touches, every failure it survives, every decision you would defend to the head of engineering. Complete enough that another engineer could build the rest from it.
+
+The implementation is narrow by design. The build list below contains only what a document cannot demonstrate: whether a rule is computed or asserted, whether a bound is enforced or reported, whether what a ticket actually caused matches what the write-up claims.
+
+No workflow, tool set, or system shape is prescribed. Those decisions are yours to make and defend.
+
+What arrives
+Tickets. Some are questions, some are requests, some are neither and should never have been filed. A few of the forty a day:
+
+A. "payments-api canary is throwing elevated 5xxs after today's deploy, what should I do"
+B. "what did we conclude about the March auth-gateway outage"
+C. "page whoever's on call for payments-api and open an incident, this one is customer-facing"
+D. "checkout latency spiking again since about 14:20" — filed eleven minutes after somebody else filed almost the same thing, and forty minutes after an incident was already opened for it
+E. "who owns billing-sync now"
+Each needs something different. Some can be answered and closed from what Fenwick already has written down. Some need a person, and the right one. Some are already being worked on. Some ask the system to do something with a real effect.
+
+Working out which is which, and what happens next in each case, is the job. Nobody is available to tell you what "handles this well" means beyond what is above.
+
+What Fenwick runs
+Your system sits across six existing systems. You are given a representative dump from each, so you can see the shape of the data and build against it locally. Treat them as the systems they are, not as files. Each has its own owner, interface, freshness, and way of being unavailable.
+
+System	Access	Notes
+Document store	read	Runbooks, postmortems, access and on-call policy. Hundreds to thousands of documents, growing. Some supersede others.
+Identity directory	read	Staff, team, title, clearance. Authoritative for who someone is. Changes slowly. Owned outside your team.
+Service catalog	read	Services Fenwick operates, owners, status. Authoritative for what exists.
+On-call scheduler	read	Who is on call right now. Changes constantly — answering from a stale copy is answering wrong.
+Incident tracker	read + write	Past and current incidents and their updates. Large. Where the record lives.
+Messaging and paging	write, and people reply	Channels engineers work in, and the thing that makes a phone ring at 3am. A human may answer, late, or never.
+The dumps ship as documents/ plus four CSVs, with DATA_DICTIONARY.md alongside. Messaging and paging has no dump; the data dictionary describes how it behaves.
+
+Treat the dumps as a client's real extract. Work from the files as shipped. Reconcile and clean in code, never by hand-editing them, and record what you decided wherever a decision was needed.
+
+Build and ingest against the dumps. Design as if the systems behind them are what you are integrating with.
+
+Constraints
+Some material is sensitive, and who filed the ticket matters. Getting it wrong in either direction — showing what you should not, or refusing what you should not — is a failure, not a rounding error. It has to hold up no matter how a ticket is worded.
+This eventually serves the whole engineering org. What each ticket costs and how long it takes are design constraints, not afterthoughts.
+The six systems are not equally fast, fresh, or reliable. Any can be slow, wrong, or unavailable. Decide what your system does then, and why.
+Some requests have a real effect, not just an answer.
+The stack and cloud are yours to choose and defend. Fenwick's platform team is four people who already own the deploy pipeline and observability, and they inherit whatever you build. Cost means both the bill and what it takes to keep the thing alive.
+What has to run
+In code, in your repository, and reachable at your deployed endpoint:
+
+POST /tickets, taking one ticket and returning what your system decided to do with it, why, and what it consulted. Contract below.
+A plan that reflects the ticket in front of it. Ticket B and ticket D must not produce the same sequence of steps, and we must be able to see that they did not.
+At least one thing your system answers that lives only in a document, not in any of the four CSVs.
+A decision on a ticket that asks for something with a real effect. Nothing needs to actually happen — what it decides, and on what basis, is what we exercise.
+Your evaluation set, executed, with results committed alongside the code that produces them.
+What you design instead
+One written design, entered from APPROACH.md. Cover these five areas. Each is read and scored as seriously as the build, and this is where we look hardest.
+
+Area	What it must answer
+The systems and its surfaces	How each of the six is reached and what your system sees of it. What is live, what is cached, and what each cache costs you when it is wrong. What happens when any one is down, and what you expose to whatever called you.
+How a ticket moves	Arrival to close, for each shape above. What decides the sequence of steps, what bounds that decision, where state between steps lives, and what happens when a step fails halfway.
+The parts that touch people and records	What gets posted, who gets paged, what gets written, in what order. Where an in-flight ticket lives while waiting on a person. What the record looks like when nobody ever answers, and what the system does about that. Every write, what it passes through, and what a half-succeeded write leaves behind. A postmortem draft published for an incident already open in the tracker must land on that record without anything else in the store needing reprocessing. Follow-ups on an existing ticket, and what the system remembers between them.
+Stack, cost and scale	What you would build on, which cloud, what you run yourself versus buy. What each ticket costs and how long it takes, and what stops either running away once the whole org is filing. What stops holding at 10,000+ engineers and hundreds of thousands of documents, what you would change, and why those changes and not others. How you would know the system is getting worse: what you measure, against what, and what tells you before a person complains.
+Decisions, assumptions, open questions	Major choices and the alternatives you rejected. What you assumed where the brief or data was silent. What you deliberately did not build. What you would ask before taking this further. Where a decision maps to something you have actually built, say so: what you built, what went wrong, what you would do differently. One or two, with specifics — not a survey of your career. If nothing maps, say that, and how you would find out rather than guessing.
+A reader should be able to follow any claim in APPROACH.md to the artifact behind it, and back. We want someone who can hold the whole system in view and defend its shape. A design that is sharp in one place and silent everywhere else scores below one that is competent throughout and says so.
+
+Notes, bullets and diagrams are expected. Polish is not scored.
+
+Deployment
+Your service must be deployed and reachable at a public HTTPS URL, which you submit alongside your repository. We call POST /tickets against that URL ourselves — we do not run your code, so a system that only works locally cannot be scored on anything that depends on running it.
+
+Do not put an authentication flow in front of the route. We cannot complete one, and a route we cannot reach goes unscored. filed_by in the request body is trusted — treat it as the caller's identity and build your access decisions on it. Building auth is not part of this exercise.
+
+Your endpoint needs its own inference credential if it calls a model. Use your own provider key — a free tier or a self-hosted open-source model is fine, and you are not assessed on which provider you choose.
+
+Check your deployed URL answers POST /tickets before you submit.
+
+API contract
+One route is fixed so every candidate's build is exercised the same way. Everything else — extra routes, internal identifiers, the shape of anything you add — is yours to define, document, defend.
+
+POST /tickets — JSON body:
+
+{"text": string, "filed_by": string, "ticket_id": string | null}
+filed_by is an employee id from the identity directory dump. ticket_id: null files a new ticket; passing one returned earlier adds to that ticket. We send this body and nothing else.
+
+Returns 200:
+
+{ "ticket_id":   string,
+  "disposition": "answered" | "routed" | "duplicate" | "action_decided" | "refused",
+  "answer":      string,
+  "plan":        [{"step": string, "why": string}],
+  "steps_run":   [{"tool": string, "outcome": "ok"|"failed"|"timeout"|"skipped", "detail": string}],
+  "citations":   [{"source": string, "reference": string}],
+  "routed_to":   string | null,
+  "related":     [string] }
+plan is what your system decided to do before doing it. steps_run is what actually happened. We read both, and we compare them.
+
+disposition and citations are yours to populate correctly, not fields to satisfy formally. refused covers a ticket the filer is not cleared to have answered, or one asking for something they are not authorized to have done. action_decided means your system determined an action was warranted and recorded that decision — no side effect is expected or graded.
+
+Submission
+A repository containing source code, APPROACH.md, ARTEFACT.md, and a README that takes a reader from a clean clone to a running system — plus the public URL where your service is deployed.
+
+APPROACH.md is the entry point to your written design: no prescribed sections, and every other document you want read must be linked from it. Design artifacts we cannot reach from APPROACH.md go unread. This does not apply to your code, which we read and exercise from the repository and the deployed endpoint regardless of what links to it.
+
+Add a short walkthrough: the workflow you designed, the decision you would defend hardest, what you deliberately did not build, and what you expect to break first under real usage.
+
+ARTEFACT.md
+We call POST /tickets ourselves, so what comes back is evidence we collect directly — do not re-describe endpoint responses here. Use ARTEFACT.md for what calling the endpoint cannot show us. Real numbers throughout, never a bare claim of a clean result:
+
+Data quality — anywhere the systems disagreed with each other or with the data dictionary, and the rule you applied. "None found" is an acceptable answer if it is true.
+Access and authorization — what "sensitive" means for a ticket in your system, what "authorized" means for a ticket asking for an action, and how each is checked. Your own words.
+Evaluation — your executed evaluation set's current result against the bar you set yourself, committed alongside the code that produces it. Reporting the numbers here is expected; this is the one place we do want results written down, because we cannot re-run your set ourselves.
+Cost and latency — what you would measure, what bound you would put on it, and where that bound would sit.
+How you would know it is working — what a good result looks like, how you would check, and what would tell you it had degraded.
+Known limitations — what your system does not yet handle well, and what you would have caught with more time.
+

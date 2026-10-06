@@ -1,0 +1,15 @@
+emp_id,name,team,title,clearance_tier
+FEN-1001,Priya Nathan,Payments,Senior Software Engineer,restricted
+FEN-1002,Owen Baptiste,Payments,Software Engineer,restricted
+FEN-1003,Marisol Feng,Payments,Software Engineer,general
+FEN-1004,Dara Whitfield,Billing,Senior Software Engineer,restricted
+FEN-1005,Tomas Ilic,Billing,Software Engineer,general
+FEN-1006,Aiko Renner,Billing,Software Engineer,general
+FEN-1007,Callum Osei,Platform,Staff Software Engineer,restricted
+FEN-1008,Grace Umeh,Platform,Software Engineer,general
+FEN-1009,Femi Adaransi,Platform,Software Engineer,general
+FEN-1010,Layla Hassoun,Security,Security Engineer,restricted
+FEN-1011,Noah Kessler,Security,Senior Security Engineer,restricted
+FEN-1012,Beatrix Solano,SRE,Senior SRE,restricted
+FEN-1013,Ravi Deshpande,SRE,SRE,general
+FEN-1014,Wren Castellano,SRE,SRE,general

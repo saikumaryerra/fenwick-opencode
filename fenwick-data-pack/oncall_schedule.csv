@@ -1,0 +1,16 @@
+service_name_raw,engineer_emp_id,currently_active,rotation_note
+payments-api,FEN-1001,true,Week 36 primary
+Payments-API,FEN-1003,false,Week 35 primary (prior week)
+billing-worker,FEN-1005,true,Week 36 primary
+primary-db,FEN-1012,true,"SRE primary, standing rotation"
+auth_gateway,FEN-1007,true,Week 36 primary
+search-index,FEN-1009,true,Week 36 primary
+notifications-worker,FEN-1014,true,"Legacy rotation, not yet wound down"
+notifications-worker,FEN-1013,false,Week 35 primary (prior week)
+checkout-service,FEN-1003,true,Week 36 primary
+billing-sync,FEN-1006,true,Week 36 primary
+fraud-detection-worker,FEN-1010,true,Week 36 primary
+edge-gateway,FEN-1008,true,Week 36 primary
+checkout-service,FEN-1001,false,Week 35 primary (prior week)
+edge-gateway,FEN-1009,false,Week 35 primary (prior week)
+primary-db,FEN-1013,false,Week 35 secondary

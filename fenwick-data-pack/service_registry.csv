@@ -1,0 +1,11 @@
+service_name,owning_team,status,description
+payments-api,Payments,active,Handles card and bank-transfer payment authorization
+billing-worker,Billing,active,Async worker that settles invoices and applies charges
+primary-db,Platform,active,Primary relational datastore shared by core services
+auth-gateway,Platform,active,Authenticates and authorizes inbound API requests
+search-index,Platform,active,Search/index service backing internal tooling
+notifications-worker,Platform,deprecated,"Legacy email/SMS dispatch worker, being decommissioned"
+checkout-service,Payments,active,Customer-facing checkout API; calls payments-api for authorization
+billing-sync,Billing,active,Synchronizes settled charges from billing-worker into the finance ledger
+fraud-detection-worker,Security,active,Scores payment and checkout events for fraud signals in near-real-time
+edge-gateway,Platform,active,Public edge/CDN-facing gateway in front of all customer-facing services
