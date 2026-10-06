@@ -87,7 +87,7 @@ Returns 200:
                     └─────────────────────────────┴─────────────────────────────┘
 ```
 
-**Stack (DECISIONS Q1):** Python/FastAPI single process. Hugging Face Docker Space (free tier, sleeps after 48h idle). Groq for LLM inference (model: agent's choice — llama3-70b-8192 or equivalent free-tier model when deployed). SQLite for state. No job queue, no background workers (designed but not built).
+**Stack (DECISIONS Q1):** Python/FastAPI single process. Hugging Face Docker Space (free tier, sleeps after 48h idle). Groq for LLM inference (model: `qwen/qwen3.8-27b` via Groq preview; free tier 30 RPM, 8K TPM, 1K RPD). SQLite for state. No job queue, no background workers (designed but not built).
 
 **Key architectural rules:**
 - All read-only extracts load at startup from CSVs + document files.
@@ -180,8 +180,8 @@ Steps in order for every ticket:
 | **Incident tracker** | Doesn't answer (read) | Cannot check for duplicates. Route the report and say the check failed in `steps_run`. Do not claim a duplicate. |
 | **Incident tracker** | Write fails | In designed production: decision recorded first, then write with idempotency key. If write fails, leave visible for retry. This build records decision only (dry run). |
 | **Messaging & paging** | Page undelivered / no ack | This build: decide who would be paged, record decision, do not send. Designed: idempotency key, no double-page for same service within window. SEV1: 5min ack → secondary. SEV2: 10min → team queue. SEV3: 1bd → team queue. If no secondary exists → owning team channel. |
-| **LLM (Groq)** | Times out / returns error | Fallback to keyword-based rules classification. No model call = no invented steps. Document search still runs. |
-| **LLM (Groq)** | Over budget | Per-ticket cap enforced (2 calls max). If daily spend cap hit → no-model path for rest of day. |
+| **LLM (Groq)** | Times out / returns error | Fallback to keyword-based rules classification. No model call = no invented steps. Document search still runs. Model: `qwen/qwen3.8-27b`, 200 tokens for classify, 512 for compose answer, 8 s timeout per call. |
+| **LLM (Groq)** | Over budget / no key | Per-ticket cap enforced (2 calls max). If daily spend cap hit → no-model path for rest of day. With no `GROQ_API_KEY` set, zero model calls are made. |
 
 ---
 
@@ -189,8 +189,11 @@ Steps in order for every ticket:
 
 | Limit | Value | Enforced by | When breached |
 |---|---|---|---|
-| Model calls per ticket | 2 max | `engine/orchestrator.py` — counter before each call | Use keyword fallback; record `skipped` for uncalled steps |
+| Model calls per ticket | 2 max | `adapters/llm.py` — `PerTicketBudget` per ticket | Use keyword fallback; record `skipped` for uncalled steps |
+| Classify token cap | 200 tokens | `adapters/llm.py` — `max_tokens=200` in payload | Model response truncated; fallback to rules if unparseable |
+| Compose-answer token cap | 512 tokens | `adapters/llm.py` — `max_tokens=512` in payload | Extractive answer kept instead of model answer |
 | Answer token cap | 2048 tokens (agent's choice) | Response builder truncation | Answer is truncated; `steps_run` notes truncation |
+| Free-tier limit (Groq) | 30 RPM / 8K TPM / 1K RPD | Enforced by Groq API; no retry on 429 | Fallback to rules; step recorded as `failed` |
 | Local lookup timeout | 2 seconds | `asyncio.wait_for()` on document search and DB queries | Step recorded as `timeout`; skip to model or fallback |
 | Model call timeout | 8 seconds | `asyncio.wait_for()` on LLM call | Fallback to rules; step recorded as `timeout` |
 | Total per-ticket timeout | 20 seconds | `asyncio.wait_for()` on the whole handler | Return whatever is ready; `steps_run` shows partial execution |

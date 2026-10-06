@@ -21,6 +21,7 @@ from __future__ import annotations
 import itertools
 from contextlib import asynccontextmanager
 
+import httpx
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
@@ -76,6 +77,7 @@ class TicketResponse(BaseModel):
 
 _orchestrator = None  # type: ignore
 _ticket_counter = itertools.count(2000)  # avoid colliding with TCK-0101..0125
+_httpx_client: httpx.AsyncClient | None = None
 
 
 def _next_ticket_id() -> str:
@@ -85,7 +87,7 @@ def _next_ticket_id() -> str:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Load data at startup, wire adapters, create the orchestrator."""
-    global _orchestrator
+    global _orchestrator, _httpx_client
 
     roster = load_roster()
     services = load_services()
@@ -94,6 +96,9 @@ async def lifespan(app: FastAPI):
     documents = load_documents()
     open_tickets = load_open_tickets()
 
+    # Create the shared httpx client for LLM calls.
+    _httpx_client = httpx.AsyncClient(timeout=15.0)
+
     _orchestrator = create_orchestrator(
         roster=roster,
         services=services,
@@ -101,9 +106,13 @@ async def lifespan(app: FastAPI):
         incidents=incidents,
         documents=documents,
         open_tickets=open_tickets,
+        httpx_client=_httpx_client,
     )
     yield
+    if _httpx_client is not None:
+        await _httpx_client.aclose()
     _orchestrator = None
+    _httpx_client = None
 
 
 app = FastAPI(title="Fenwick Cloud Engineering Support Queue", version="0.1.0", lifespan=lifespan)

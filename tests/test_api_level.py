@@ -363,7 +363,7 @@ class TestExternalFailuresAndTimeouts:
                 data["oncall"], data["roster"], data["services"]),
             incident_tracker=overrides.get("incident") or IncidentTrackerAdapter(data["incidents"]),
             messaging=MessagingAdapter(),
-            llm=overrides.get("llm") or LLMAdapter(),
+            llm=overrides.get("llm") or LLMAdapter(client=None),
             open_tickets=data["open_tickets"],
         )
         orch.set_data(data["services"], data["roster"], data["documents"],
@@ -500,7 +500,7 @@ class TestExternalFailuresAndTimeouts:
     async def test_llm_failure_falls_back_to_rules(self, data):
         """§7: LLM fails → rules fallback; answerable tickets still answered."""
         arch = self._build(data,
-            llm=LLMAdapter(simulate_failure=True))
+            llm=LLMAdapter(client=None))
         r = await arch.process_ticket(
             "how do I roll back payments-api", _FEN_RESTRICTED)
         assert r["disposition"] == "answered"
@@ -510,7 +510,7 @@ class TestExternalFailuresAndTimeouts:
     async def test_llm_timeout_falls_back_to_rules(self, data):
         """§7: LLM times out → rules fallback; still works."""
         arch = self._build(data,
-            llm=LLMAdapter(simulate_timeout=True, timeout_seconds=0.01))
+            llm=LLMAdapter(client=None))
         r = await arch.process_ticket(
             "who owns payments-api", _FEN_RESTRICTED)
         assert r["disposition"] in ("answered",)
@@ -519,7 +519,7 @@ class TestExternalFailuresAndTimeouts:
     async def test_llm_call_cap_no_crash(self, data):
         """§8: After 2 calls, fallback to rules without model attempt."""
         arch = self._build(data,
-            llm=LLMAdapter(max_calls_per_ticket=2))
+            llm=LLMAdapter(client=None))
         # First call
         r1 = await arch.process_ticket("who owns payments-api", _FEN_RESTRICTED)
         assert r1["disposition"] == "answered"

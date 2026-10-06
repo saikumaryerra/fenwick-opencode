@@ -1,0 +1,7 @@
+# Runtime dependencies for the deployed service; the Dockerfile installs these.
+# Pinned to the versions the test suite passes against.
+fastapi==0.142.2
+httpx==0.28.1
+pydantic==2.13.5
+python-docx==1.2.0
+uvicorn==0.54.0

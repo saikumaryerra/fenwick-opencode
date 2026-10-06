@@ -1,0 +1,22 @@
+# Secrets: never bake these into the image.
+.env
+.env.*
+
+# Local tooling and caches
+.git
+.venv
+**/__pycache__
+**/*.pyc
+.pytest_cache
+
+# Not needed at runtime
+tests/
+eval/
+docs/
+scripts/
+*.md
+scenario.txt
+opencode.json
+start_server.sh
+Dockerfile
+.dockerignore

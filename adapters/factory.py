@@ -21,6 +21,8 @@ def create_orchestrator(
     incidents: list[dict],
     documents: dict[str, dict],
     open_tickets: list[dict] | None = None,
+    *,
+    httpx_client: Any | None = None,
 ) -> Orchestrator:
     """Create an orchestrator with all adapters wired up to loaded data.
 
@@ -31,6 +33,7 @@ def create_orchestrator(
         incidents: From csv_loader.load_incidents()
         documents: From doc_loader.load_documents()
         open_tickets: From csv_loader.load_open_tickets(), optional
+        httpx_client: httpx.AsyncClient for LLM calls (created in main.py lifespan).
 
     Returns:
         A fully wired Orchestrator instance.
@@ -41,7 +44,7 @@ def create_orchestrator(
     oncall = OncallSchedulerAdapter(oncall_schedule, roster, services)
     incident_tracker = IncidentTrackerAdapter(incidents)
     messaging = MessagingAdapter()
-    llm = LLMAdapter()
+    llm = LLMAdapter(client=httpx_client)
 
     orch = Orchestrator(
         doc_store=doc_store,

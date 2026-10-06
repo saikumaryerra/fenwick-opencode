@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import asyncio
 import re
+import time
 from typing import Any
 
 from auth.clearance import compute_clearance, can_see_document
@@ -36,7 +37,7 @@ from adapters.service_catalog import ServiceCatalogAdapter
 from adapters.oncall import OncallSchedulerAdapter
 from adapters.incident_tracker import IncidentTrackerAdapter
 from adapters.messaging import MessagingAdapter
-from adapters.llm import LLMAdapter
+from adapters.llm import LLMAdapter, PerTicketBudget
 
 
 # Total per-ticket timeout (§8).
@@ -122,6 +123,12 @@ class Orchestrator:
         self, text: str, filed_by: str, tracker: StepTracker
     ) -> dict:
         """Internal pipeline — plan, then execute, then respond."""
+
+        # Create per-ticket budget for model calls.
+        deadline = time.monotonic() + _PER_TICKET_TIMEOUT
+        budget = PerTicketBudget(deadline=deadline)
+        self._llm.set_budget(budget)
+
         # ── Phase 1: Identify filer ─────────────────────────────────────
         tracker.plan("Identify filer", "Look up who filed the ticket in the identity directory")
 
@@ -169,20 +176,21 @@ class Orchestrator:
         # ── Phase 3: Classify ───────────────────────────────────────────
         tracker.plan("Classify ticket", "Determine ticket kind, services, and action requests")
 
-        classification = None
-        try:
-            classification = await self._llm.classify(text, self._services_cache)
-            tracker.ok("classify_ticket", f"Kind: {classification.get('kind', 'unknown')}")
-        except (ConnectionError, TimeoutError) as e:
-            tracker.failed("classify_ticket", f"LLM unavailable, using rules: {e}")
-            # Fallback to rules classification
-            from classify.classify import classify as rules_classify
-            classification = rules_classify(text, self._services_cache)
-            tracker.skipped("classify_ticket_rules_fallback",
-                            f"Rules fallback: kind={classification.get('kind', 'unknown')}")
+        # The LLM adapter uses its per-ticket budget internally.  It attempts
+        # a model call when the budget allows and falls back to rules on any
+        # failure.  The orchestrator records the outcome step.
+        classification = await self._llm.classify(
+            text, self._services_cache, catalog=self._services_cache
+        )
 
-        if classification is None:
-            classification = {"kind": KIND_GENERAL_QUERY, "services": [], "action_requested": None}
+        # Record the classify step based on what the adapter did.
+        budget = self._llm._budget  # type: ignore[union-attr]
+        if budget is not None and budget.calls > 0:
+            tracker.ok("model_classify",
+                       f"Model: {self._llm._model_id}, kind={classification.get('kind', 'unknown')}")
+        else:
+            tracker.ok("rules_classify",
+                       f"Rules fallback (no model call), kind={classification.get('kind', 'unkonwn')}")
 
         kind = classification.get("kind", KIND_GENERAL_QUERY)
         services = classification.get("services", [])
@@ -355,20 +363,40 @@ class Orchestrator:
 
         citations = []
         for doc in docs_result[:2]:
+            ref_text = doc.get("text", "")[:200]
             citations.append({
                 "source": doc.get("filename", ""),
-                "reference": doc.get("text", "")[:200],
+                "reference": ref_text,
             })
 
         if docs_result:
             best = docs_result[0]
             answer_text = best.get("text", "")
             tracker.ok("search_documents", f"Found {len(docs_result)} matching documents")
+
+            # Draft label is always added by code, never by the model.
             if best.get("is_draft"):
                 answer_text = f"[DRAFT — not yet finalized]\n\n{answer_text}"
 
             # Also check for related open incidents
             related = await self._find_related_incidents(services, tracker)
+
+            # Call 2: attempt model compose for a better answer.
+            # Send at most the top 2 docs that passed clearance, 8 000 chars total.
+            model_answer = await self._llm.compose_answer(
+                text, docs_result[:2], clearance
+            )
+            if model_answer:
+                tracker.ok("model_compose_answer",
+                           f"Model composed answer ({len(model_answer)} chars)")
+                # Draft label stays applied by code even if model composed.
+                if best.get("is_draft"):
+                    model_answer = f"[DRAFT — not yet finalized]\n\n{model_answer}"
+                answer_text = model_answer
+            else:
+                # Keep the extractive answer on failure — no step recorded;
+                # the adapter already logged the reason.
+                pass
 
             return {
                 "disposition": "answered",

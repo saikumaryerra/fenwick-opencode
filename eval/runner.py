@@ -347,7 +347,8 @@ async def run_case_remote(case: dict, base_url: str,
 from eval.cases import FILER_INFO
 
 
-async def run_eval(url: str | None = None) -> list[dict]:
+async def run_eval(url: str | None = None, *,
+                   no_model: bool = False, delay: float = 0.0) -> list[dict]:
     """Run all evaluation cases and return results."""
     cases = all_cases()
 
@@ -357,10 +358,19 @@ async def run_eval(url: str | None = None) -> list[dict]:
         print("Targeting in-process orchestrator")
 
     orch = None
+    model_id = _get_model_id()
+
     if not url:
         print("Loading data and creating orchestrator...")
         orch = _load_orchestrator()
         print("Orchestrator ready.")
+
+        # If --no-model, clear the API key so LLM calls are skipped.
+        if no_model:
+            import os
+            os.environ["GROQ_API_KEY"] = ""
+            model_id = "none"
+            print("--no-model: GROQ_API_KEY cleared (rules path only)")
 
     results = []
     follow_up_ticket_ids: dict[str, str] = {}  # case_id → ticket_id
@@ -398,6 +408,7 @@ async def run_eval(url: str | None = None) -> list[dict]:
 
         results.append({
             "id": cid,
+            "model_id": model_id,
             "case": case,
             "result": result,
             "checks_result": checks_result,
@@ -408,7 +419,19 @@ async def run_eval(url: str | None = None) -> list[dict]:
         if marker is None and result.get("ticket_id") and cid == "FU01":
             follow_up_ticket_ids[cid] = result["ticket_id"]
 
+        # Rate-limit pacing between cases
+        if delay > 0 and i < len(cases) - 1:
+            await asyncio.sleep(delay)
+
     return results
+
+
+def _get_model_id() -> str:
+    """Return the model ID from environment, or 'none'."""
+    import os
+    if "GROQ_MODEL" in os.environ:
+        return os.environ["GROQ_MODEL"]
+    return "qwen/qwen3.8-27b"
 
 
 # ── Report generation ─────────────────────────────────────────────────────
@@ -558,9 +581,13 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description="Run evaluation suite (BRIEFING.md §9)")
     parser.add_argument("--url", help="Target URL (e.g. http://localhost:7860). Default: in-process")
+    parser.add_argument("--no-model", action="store_true",
+                        help="Force rules path by clearing GROQ_API_KEY")
+    parser.add_argument("--delay", type=float, default=0.0,
+                        help="Seconds to wait between cases (rate-limit pacing)")
     args = parser.parse_args()
 
-    results = asyncio.run(run_eval(url=args.url))
+    results = asyncio.run(run_eval(url=args.url, no_model=args.no_model, delay=args.delay))
     js_path, md_path = write_results(results)
 
     print(f"\nResults written to:")
@@ -569,7 +596,17 @@ def main():
     print(f"\n=== Bar Summary ===")
     bars = compute_bars(results)
     s = bars["summary"]
+
+    # Get model_id from first result
+    model_id = results[0].get("model_id", "unknown") if results else "unknown"
+    print(f"  Model: {model_id}")
     print(f"  Passed: {s['passed_cases']}/{s['total_cases']} ({s['pass_rate']})")
+
+    for bar_name in ["restricted_content_leaks", "wrongful_refusals",
+                      "disposition_accuracy", "planned_steps_executed", "p95_latency"]:
+        b = bars[bar_name]
+        status = "✅" if b["pass"] else "❌"
+        print(f"  {status} {bar_name}: target={b['target']}, actual={b['actual']}")
     for bar_name in ["restricted_content_leaks", "wrongful_refusals",
                       "disposition_accuracy", "planned_steps_executed", "p95_latency"]:
         b = bars[bar_name]
