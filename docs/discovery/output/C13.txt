@@ -1,0 +1,168 @@
+======================================================================
+CROSS-CHECK 1: Clearance assignment rule (policy_access_and_clearance.docx)
+======================================================================
+Rule: 'Restricted clearance is held by: every member of the Security team, regardless of title;
+       and any engineer at Senior, Staff, or above title level, regardless of team.'
+
+  MISMATCH: FEN-1002 (Owen Baptiste) — team=Payments, title=Software Engineer, actual=restricted, expected=general
+  1 mismatch(es)
+  Clearance tiers in roster: {'general', 'restricted'} (rule allows: restricted, general)
+
+======================================================================
+CROSS-CHECK 2: On-call rotation rule (policy_oncall_rotation.docx)
+======================================================================
+Rule 1: 'Each active service has a weekly primary on-call engineer, drawn from the service's owning team.'
+
+  Active services in registry: ['auth-gateway', 'billing-sync', 'billing-worker', 'checkout-service', 'edge-gateway', 'fraud-detection-worker', 'payments-api', 'primary-db', 'search-index']
+  Deprecated services: ['notifications-worker']
+  Services with on-call entries: ['auth-gateway', 'billing-sync', 'billing-worker', 'checkout-service', 'edge-gateway', 'fraud-detection-worker', 'notifications-worker', 'payments-api', 'primary-db', 'search-index']
+  All active services have on-call entries ✓
+  ** Deprecated services still with on-call entries: ['notifications-worker'] (rule says 'wound down once decommissioning begins')
+
+  On-call engineer team check (active only):
+    All non-SRE on-call assignments are from the owning team ✓
+
+======================================================================
+CROSS-CHECK 3: Escalation thresholds (policy, runbook, and team notes)
+======================================================================
+policy_oncall_rotation says: SEV1=5min, SEV2=15min, SEV3=1 business day
+runbook_oncall_escalation says: escalate if not ack'd within 10 min
+payments_team_notes_rollback says: 'we've been escalating after 3 minutes lately, not 10'
+
+  → Policy says 5/15/1day acknowledge SLAs. Escalation runbook says 10min to escalate.
+  → Team notes contradict escalation runbook (3 min vs 10 min).
+  → Can't verify actual acknowledgement times from dumps (no timestamps).
+
+======================================================================
+CROSS-CHECK 4: service_registry vs oncall_schedule — name normalization
+======================================================================
+  VARIANT: 'Payments-API' → canonical 'payments-api'
+  VARIANT: 'auth_gateway' → canonical 'auth-gateway'
+  (All normalizable per D-09 — verified 100% coverage)
+
+======================================================================
+CROSS-CHECK 5: incident_log vs service_registry — name match rate
+======================================================================
+  Exact match: 43332/50000 (86%)
+  Normalizable: 50000/50000 (100%)
+  All incident service names are normalizable ✓
+
+======================================================================
+CROSS-CHECK 6: incident_log.postmortem_doc vs documents/postmortems/ on disk
+======================================================================
+  Linked from CSV: ['postmortem_auth_gateway_outage_FINAL.docx', 'postmortem_billing_worker_duplicate_charges.docx', 'postmortem_payments_api_5xx_2026-06-11.docx', 'postmortem_search_index_reindex_lag_2026-08-02.docx']
+  Orphaned on disk: ['postmortem_auth_gateway_outage_DRAFT_superseded.docx', 'postmortem_payments_api_canary_2026-09-04_DRAFT.docx']
+  Missing from disk: []
+
+  Postmortem-incident description check:
+    postmortem_auth_gateway_outage_FINAL.docx: linked to 1 incident(s)
+      INC-1994: Auth gateway outage; initial hypothesis later revised
+    postmortem_billing_worker_duplicate_charges.docx: linked to 1 incident(s)
+      INC-2058: Duplicate settlement charges detected for a batch of invoices
+    postmortem_payments_api_5xx_2026-06-11.docx: linked to 1 incident(s)
+      INC-2031: Elevated 5xx rate after a config rollout; mitigated by rollback
+    postmortem_search_index_reindex_lag_2026-08-02.docx: linked to 1 incident(s)
+      INC-2077: Index lag spike during reindex; self-recovered
+
+======================================================================
+CROSS-CHECK 7: open_tickets.related_incident_id → incident_log.incident_id
+======================================================================
+  TCK-0101 → INC-2115: open, SEV2 ✓
+
+======================================================================
+CROSS-CHECK 8: Scenario tickets A–E — trace what data each needs
+======================================================================
+
+A. "payments-api canary is throwing elevated 5xxs after today's deploy"
+   Needs: payments-api rollback runbook (exists ✓), canary postmortem DRAFT (exists ✓ on disk, NOT linked)
+          on-call for payments-api (FEN-1001 ✓), open incident (INC-2101 referenced in draft — check below),
+          service_registry (active ✓)
+
+B. "what did we conclude about the March auth-gateway outage"
+   Needs: Both auth-gateway postmortems (DRAFT superseded + FINAL, both exist ✓, RESTRICTED)
+          The DRAFT has disproven hypothesis; FINAL has real root cause (committed credential)
+          Only FINAL is linked from incident_log
+
+C. "page whoever's on call for payments-api and open an incident"
+   Needs: oncall_schedule (FEN-1001 active ✓), roster (Priya Nathan ✓),
+          ability to page (no dump — system action), open incident (incident_tracker write)
+
+D. "checkout latency spiking again since about 14:20"
+   Needs: TCK-0101 → INC-2115 (open, SEV2) ✓, checkout-service runbook (exists ✓),
+          related to earlier same ticket (duplicate detection needed)
+          INC-2115 updates show 2 entries already
+
+E. "who owns billing-sync now"
+   Needs: service_registry (Billing team, active ✓), simple answer
+
+  Checking INC-2101 (referenced in payments-api canary DRAFT):
+    Found: Canary throwing elevated 5xx after today's deploy; rollback in progress
+    Status: open, updates: 2026-09-04T14:32:00|FEN-1001|Rolled back to previous stable build, monitoring;2026-09-04T15:10:00|FE
+
+  Check: duplicate detection for Ticket D scenario (two similar tickets):
+    Tickets matching 'checkout' or 'latency': 2
+      TCK-0101: checkout latency spiking again since about 14:20
+      TCK-0102: customers reporting checkout-service errors intermittently today, seems unrelate
+
+======================================================================
+CROSS-CHECK 9: payments_team_notes_rollback — informal rule vs official
+======================================================================
+  Team notes say: escalation window is 3 min (not 10 min as in official runbook_oncall_escalation)
+  Team notes say: 'fenctl rollback payments-api --to-last-stable'
+  Official runbook_rollback_payments_api says same command ✓
+  → Escalation timing is contradictory between team notes and official runbook
+
+======================================================================
+CROSS-CHECK 10: SRE team presence in roster vs ownership in registry
+======================================================================
+  Roster teams: ['Billing', 'Payments', 'Platform', 'SRE', 'Security']
+  Registry owning teams: ['Billing', 'Payments', 'Platform', 'Security']
+  Teams in roster but not owning any service: ['SRE']
+  SRE members (3): ['Beatrix Solano', 'Ravi Deshpande', 'Wren Castellano']
+  SRE on-call assignments: 4
+    FEN-1012 → primary-db (active=true)
+    FEN-1014 → notifications-worker (active=true)
+    FEN-1013 → notifications-worker (active=false)
+    FEN-1013 → primary-db (active=false)
+
+======================================================================
+CROSS-CHECK 11: Date format distribution by service
+======================================================================
+  Date format per service (first 6 shown):
+    auth-gateway: ISO=33% DDMon=33% Slash=33%
+    billing-sync: ISO=33% DDMon=33% Slash=33%
+    billing-worker: ISO=33% DDMon=33% Slash=33%
+    checkout-service: ISO=33% DDMon=33% Slash=33%
+    edge-gateway: ISO=33% DDMon=33% Slash=33%
+    fraud-detection-worker: ISO=33% DDMon=33% Slash=33%
+
+======================================================================
+CROSS-CHECK 12: incident_id numbering — 2 styles
+======================================================================
+  Short IDs (INC-NNNN): 6 incidents
+  Long IDs (INC-NNNNNN): 49994 incidents
+  Short IDs: ['INC-1994', 'INC-2031', 'INC-2058', 'INC-2077', 'INC-2101', 'INC-2115']
+  Latest incident_id: INC-2115
+  Oldest incident_id: INC-009000
+  Short-ID incident dates (sample): ['2026-06-11', '07/22/2026', '14 Mar 2026', '2026-09-04', '08/02/2026']
+
+======================================================================
+CROSS-CHECK 13: Open incidents — do all have updates?
+======================================================================
+  Open incidents: 494
+  Open with updates: 494
+  Open without updates: []
+  Latest open: INC-2115 (Checkout latency climbing since roughly 14:20; investigating downstream dependen)
+
+======================================================================
+CROSS-CHECK 14: open_tickets matching scenario examples
+======================================================================
+  TCK-0101 filed by FEN-1003 at 2026-09-07T14:31:00
+  Text: checkout latency spiking again since about 14:20
+  Related incident: INC-2115
+  Similar tickets (potential duplicates):
+    TCK-0102 | 2026-09-07T10:05:00 | customers reporting checkout-service errors intermittently t
+
+======================================================================
+CROSS-CHECK COMPLETE
+======================================================================

@@ -1,0 +1,31 @@
+Source: postmortems/postmortem_auth_gateway_outage_FINAL.docx
+Status: MIXED_DRAFT_FINAL
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Postmortem: auth-gateway Outage (2026-03-14)
+RESTRICTED — see policy_access_and_clearance.docx
+Document
+postmortem_auth_gateway_outage
+Version
+2.0
+Status
+FINAL / APPROVED
+Date
+14 Mar 2026
+Owner
+Security
+Supersedes
+postmortem_auth_gateway_outage v1.0 (DRAFT, 2026-03-10) -- the v1.0 preliminary hypothesis was disproven during investigation and is retained for audit history only.
+1. Summary
+auth-gateway rejected a growing share of otherwise-valid requests over a 90-minute window on 2026-03-14, escalated to SEV1 once downstream services began failing health checks.
+2. Impact
+auth-gateway rejected ~35% of requests for 90 minutes, degrading every service behind it. The exposed credential was rotated and repository scanning for embedded credentials was added to CI.
+3. Root cause
+Investigation traced the failure to a service-account credential that had been embedded directly in a configuration file committed to a shared repository. That credential was used to obtain broader access than intended, and the resulting anomalous access pattern triggered auth-gateway's internal protection logic, which began rejecting a growing share of legitimate traffic as a side effect. The v1.0 draft's traffic-spike/DDoS hypothesis was investigated and ruled out: request-rate telemetry for the window did not show the volume increase that hypothesis would require.
+4. Root cause summary
+Root cause category
+Committed service-account credential enabling unintended lateral access.
+5. Roles & responsibilities
+Incident commander: on-call SRE. Communications: owning team lead. Follow-up owner: owning team engineering manager.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

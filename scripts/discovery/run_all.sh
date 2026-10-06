@@ -13,3 +13,5 @@ python3 scripts/discovery/C08_date_format_crisis.py > docs/discovery/output/C08.
 python3 scripts/discovery/C09_service_name_variants.py > docs/discovery/output/C09.txt 2>&1
 python3 scripts/discovery/C10_updates_field_audit.py > docs/discovery/output/C10.txt 2>&1
 python3 scripts/discovery/C11_scenario_mapping.py > docs/discovery/output/C11.txt 2>&1
+python3 scripts/discovery/C12_extract_docx.py > docs/discovery/output/C12_docx_extracts_summary.txt 2>&1
+python3 scripts/discovery/C13_cross_checks.py > docs/discovery/output/C13.txt 2>&1

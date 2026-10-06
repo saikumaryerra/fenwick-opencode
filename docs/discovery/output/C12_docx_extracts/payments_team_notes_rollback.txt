@@ -1,0 +1,12 @@
+Source: runbooks/payments_team_notes_rollback.docx
+Status: UNMARKED
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Payments Team Notes — Rollback Quick Reference
+Internal team notes, kept by the Payments on-call rotation. Not an official runbook — just what we actually do.
+Rollback
+Same as always: fenctl rollback payments-api --to-last-stable. Works fine, don't overthink it.
+Escalation
+Heads up — we've been escalating after 3 minutes lately, not 10. Incident volume's been higher this quarter and waiting the full window before paging someone else in was costing us time on a couple of calls. Nobody's updated the official runbook yet.
+— Priya

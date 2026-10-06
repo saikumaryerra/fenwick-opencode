@@ -18,7 +18,7 @@ Rows: 15  |  Columns: 4 (service_name_raw, engineer_emp_id, currently_active, ro
   Duplicate rows: 0
 
 --- 4. Consistency ---
-  Distinct name_raw values: {'billing-sync', 'fraud-detection-worker', 'auth_gateway', 'notifications-worker', 'checkout-service', 'primary-db', 'payments-api', 'search-index', 'Payments-API', 'edge-gateway', 'billing-worker'}
+  Distinct name_raw values: {'payments-api', 'billing-sync', 'auth_gateway', 'search-index', 'checkout-service', 'billing-worker', 'Payments-API', 'fraud-detection-worker', 'edge-gateway', 'primary-db', 'notifications-worker'}
   Variants:
     'Payments-API'
     'auth_gateway'
@@ -57,4 +57,4 @@ Rows: 15  |  Columns: 4 (service_name_raw, engineer_emp_id, currently_active, ro
     search-index: 1
 
 === Profile complete ===
-  Timestamp: 2026-10-06 12:26
+  Timestamp: 2026-10-06 12:41

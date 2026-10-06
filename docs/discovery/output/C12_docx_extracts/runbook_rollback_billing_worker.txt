@@ -1,0 +1,23 @@
+Source: runbooks/runbook_rollback_billing_worker.docx
+Status: UNMARKED
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Runbook: billing-worker Rollback
+Document
+runbook_rollback_billing_worker
+Owning team
+Billing
+Status
+APPROVED
+Last reviewed
+2026-07-28
+1. Purpose
+Rollback procedure for billing-worker, the async settlement/invoicing worker.
+2. When to use this runbook
+Use when a billing-worker deploy is suspected of causing settlement errors, duplicate charge submissions, or a spike in worker retry rate.
+3. Rollback procedure
+Run: fenctl rollback billing-worker --to-last-stable, then drain the retry queue manually before resuming normal processing -- billing-worker does not auto-drain on rollback.
+4. Escalation
+Escalate to the Billing on-call engineer if duplicate-charge symptoms persist after rollback and queue drain.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

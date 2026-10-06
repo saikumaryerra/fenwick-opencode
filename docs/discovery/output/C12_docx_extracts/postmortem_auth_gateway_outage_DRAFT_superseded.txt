@@ -1,0 +1,29 @@
+Source: postmortems/postmortem_auth_gateway_outage_DRAFT_superseded.docx
+Status: MIXED_DRAFT_FINAL
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Postmortem: auth-gateway Outage (2026-03-14) — DRAFT
+RESTRICTED — see policy_access_and_clearance.docx
+Document
+postmortem_auth_gateway_outage
+Version
+1.0
+Status
+DRAFT / SUPERSEDED -- see v2.0 FINAL
+Date
+2026-03-10
+Owner
+Security
+1. Summary
+Preliminary write-up circulated during active investigation, before root cause was confirmed. Retained for audit history; superseded by the FINAL postmortem once investigation concluded.
+2. Impact
+Impact figures not yet finalized at draft time; see FINAL postmortem for confirmed impact.
+3. Root cause
+Preliminary hypothesis: a sudden spike in inbound traffic was misidentified by auth-gateway as a DDoS event, triggering rate-limiter logic that began rejecting legitimate requests. This hypothesis was under active verification at the time of this draft.
+4. Root cause summary
+Root cause category
+Preliminary hypothesis: traffic-spike-triggered rate-limiter failure (UNCONFIRMED -- see FINAL postmortem, which disproves this).
+5. Roles & responsibilities
+Incident commander: on-call SRE. Communications: owning team lead. Follow-up owner: owning team engineering manager.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

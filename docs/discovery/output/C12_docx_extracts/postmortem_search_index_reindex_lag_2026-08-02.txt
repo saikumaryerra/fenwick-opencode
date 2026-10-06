@@ -1,0 +1,28 @@
+Source: postmortems/postmortem_search_index_reindex_lag_2026-08-02.docx
+Status: FINAL
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Postmortem: search-index Reindex Lag Spike (2026-08-02)
+Document
+postmortem_search_index_reindex_lag_2026-08-02
+Version
+1.0
+Status
+FINAL / APPROVED
+Date
+08/02/2026
+Owner
+Platform
+1. Summary
+A scheduled reindex job on search-index ran concurrently with an unrelated bulk-import job, causing query latency to climb for roughly 40 minutes before the reindex completed and latency self-recovered.
+2. Impact
+Internal search latency (used by several engineering tools, not customer-facing) roughly tripled for 40 minutes; no customer-facing impact.
+3. Root cause
+The reindex scheduler had no mutual-exclusion check against other bulk jobs touching the same index. Once the reindex job completed, index read latency returned to baseline without any manual intervention.
+4. Root cause summary
+Root cause category
+Scheduling gap -- no mutual exclusion between reindex and bulk-import jobs.
+5. Roles & responsibilities
+Incident commander: on-call SRE. Communications: owning team lead. Follow-up owner: owning team engineering manager.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

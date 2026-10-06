@@ -1,0 +1,21 @@
+Source: runbooks/runbook_database_failover.docx
+Status: UNMARKED
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Runbook: primary-db Failover
+Document
+runbook_database_failover
+Owning team
+Platform
+Status
+APPROVED
+Last reviewed
+2026-05-19
+1. Purpose
+Failover procedure for primary-db, the shared relational datastore used by payments-api, billing-worker, checkout-service, and auth-gateway.
+2. Procedure
+Promote the standby replica via the platform console, confirm replication lag was under 5 seconds at the time of promotion, and re-point dependent services' connection strings per their own service runbooks.
+3. Escalation
+Escalate to the SRE on-call for primary-db immediately on trigger.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

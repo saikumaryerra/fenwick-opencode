@@ -1,0 +1,21 @@
+Source: runbooks/runbook_oncall_escalation.docx
+Status: UNMARKED
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Runbook: On-Call Escalation
+Document
+runbook_oncall_escalation
+Owning team
+Platform / SRE
+Status
+APPROVED
+Last reviewed
+2026-06-02
+1. When to escalate
+Escalate any incident that a runbook's own escalation section points to, or any SEV1/SEV2 incident where the assigned on-call engineer has not acknowledged within 10 minutes.
+2. How to escalate
+File a ticket in the Ops Escalation queue, tagged with the incident severity and the affected service. Include a link to the relevant runbook and a one-line statement of current impact.
+3. After escalation
+The Ops Escalation queue pages the secondary on-call automatically for SEV1 tickets. SEV2/SEV3 tickets route to the team's normal queue.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

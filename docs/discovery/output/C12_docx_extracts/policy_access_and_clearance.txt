@@ -1,0 +1,30 @@
+Source: policies/policy_access_and_clearance.docx
+Status: UNMARKED
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Policy: Access & Clearance Tiers
+Document
+policy_access_and_clearance
+Owning team
+Security
+Status
+APPROVED
+Last reviewed
+2026-08-01
+1. Purpose
+This policy defines the two clearance tiers used across Fenwick Cloud's internal documentation and tooling, and which staff hold each tier.
+2. Tier definitions
+General-tier documents are visible to all engineering staff. Restricted-tier documents contain security-sensitive material -- credential handling, incident root causes involving unauthorized access, or details that could materially aid an attacker -- and are visible only to staff holding restricted clearance.
+3. Who holds restricted clearance
+Restricted clearance is held by: every member of the Security team, regardless of title; and any engineer at Senior, Staff, or above title level, regardless of team. All other engineering staff hold general clearance.
+Team / Title
+Clearance tier
+Security (any title)
+Restricted
+Senior / Staff title or above (any team)
+Restricted
+All engineers not meeting either condition above hold general clearance. The engineer roster's recorded clearance_tier field is provisioned by IT and is expected to match this rule; owning teams are responsible for flagging and correcting any roster entry that has drifted from it.
+4. Handling a restricted request from an unauthorized requester
+State that a restricted document exists and that the requester lacks clearance to view it. Do not quote, paraphrase, or summarize its content. Direct the requester to the document's owning team if they need the information for an active incident.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

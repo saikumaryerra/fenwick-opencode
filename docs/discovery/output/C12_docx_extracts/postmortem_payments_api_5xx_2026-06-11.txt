@@ -1,0 +1,28 @@
+Source: postmortems/postmortem_payments_api_5xx_2026-06-11.docx
+Status: FINAL
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Postmortem: payments-api Elevated 5xx (2026-06-11)
+Document
+postmortem_payments_api_5xx_2026-06-11
+Version
+1.0
+Status
+FINAL / APPROVED
+Date
+2026-06-11
+Owner
+Payments
+1. Summary
+A deploy at 09:40 introduced a misconfigured connection-pool size, causing payments-api to exhaust database connections under normal traffic within 12 minutes, surfacing as elevated 5xx responses to callers.
+2. Impact
+Approximately 4% of payment authorization requests failed for 18 minutes; no customer funds were double-charged or lost.
+3. Root cause
+Rollback via fenctl restored the previous connection-pool configuration and resolved the issue within 6 minutes of rollback completion.
+4. Root cause summary
+Root cause category
+Deploy misconfiguration.
+5. Roles & responsibilities
+Incident commander: on-call SRE. Communications: owning team lead. Follow-up owner: owning team engineering manager.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

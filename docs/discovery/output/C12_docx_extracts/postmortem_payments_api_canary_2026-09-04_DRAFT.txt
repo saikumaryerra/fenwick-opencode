@@ -1,0 +1,30 @@
+Source: postmortems/postmortem_payments_api_canary_2026-09-04_DRAFT.docx
+Status: DRAFT
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Postmortem (DRAFT): payments-api Canary 5xx (2026-09-04)
+Document
+postmortem_payments_api_canary_2026-09-04
+Version
+0.1
+Status
+DRAFT -- pending final review
+Date
+2026-09-04
+Owner
+Payments
+Related incident
+INC-2101 (open at time of writing)
+1. Summary
+Today's payments-api deploy introduced a canary that began throwing elevated 5xx responses within 8 minutes of rollout. A rollback was initiated per runbook_rollback_payments_api.docx while investigation continued.
+2. Impact
+Affected services: payments-api (primary), checkout-service (downstream, elevated retry volume during the window). Approximately 6% of payment authorization requests were affected before rollback completed.
+3. Root cause
+Preliminary root cause: the canary build shipped with a lowered request-timeout default that was too aggressive for payments-api's p99 dependency latency to primary-db under normal load, causing a share of otherwise-healthy requests to time out and surface as 5xx. Confirmed by comparing the canary build's config diff against the previous stable release.
+4. Root cause summary
+Root cause category
+Overly aggressive request-timeout default shipped in a canary build.
+5. Roles & responsibilities
+Incident commander: on-call SRE. Communications: owning team lead. Follow-up owner: Marisol Feng (FEN-1003) -- add a timeout-regression check to the canary gate.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

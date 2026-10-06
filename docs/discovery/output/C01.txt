@@ -1,5 +1,5 @@
 === D-01 hypotheses ===
-Date: 2026-10-06 12:26
+Date: 2026-10-06 12:41
 Source: scenario.txt, DATA_DICTIONARY.md
 
 H1  | There are exactly 4 CSV files shipped alongside documents/

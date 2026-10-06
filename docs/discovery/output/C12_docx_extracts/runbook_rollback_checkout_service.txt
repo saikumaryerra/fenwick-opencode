@@ -1,0 +1,23 @@
+Source: runbooks/runbook_rollback_checkout_service.docx
+Status: UNMARKED
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Runbook: checkout-service Rollback & Latency Triage
+Document
+runbook_rollback_checkout_service
+Owning team
+Payments
+Status
+APPROVED
+Last reviewed
+2026-08-20
+1. Purpose
+Covers the standard rollback and latency-triage procedure for checkout-service, the customer-facing checkout API that calls payments-api for authorization.
+2. First steps on a latency report
+Check whether payments-api or a downstream dependency (fraud-detection-worker, primary-db) is elevated first -- checkout-service latency reports are more often a downstream symptom than a checkout-service-local problem.
+3. Rollback procedure
+Run: fenctl rollback checkout-service --to-last-stable.
+4. Escalation
+Escalate to the Payments on-call engineer if latency has not returned to baseline within 10 minutes of ruling out a downstream cause.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

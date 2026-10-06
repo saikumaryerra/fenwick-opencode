@@ -1,0 +1,19 @@
+Source: policies/policy_oncall_rotation.docx
+Status: UNMARKED
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Policy: On-Call Rotation
+Document
+policy_oncall_rotation
+Owning team
+SRE
+Status
+APPROVED
+Last reviewed
+2026-04-15
+1. Rotation cadence
+Each active service has a weekly primary on-call engineer, drawn from the service's owning team. Deprecated services are wound down from the rotation once decommissioning begins; owning teams are responsible for removing a deprecated service's entries from the on-call tool.
+2. Acknowledgement SLA
+SEV1: acknowledge within 5 minutes. SEV2: acknowledge within 15 minutes. SEV3: acknowledge within one business day.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

@@ -1,0 +1,559 @@
+
+======================================================================
+=== [policies] policy_access_and_clearance.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: UNMARKED
+  ** MARKING: Contains RESTRICTED content
+
+  --- Full text extract (1794 chars, 25 lines) ---
+     0: Policy: Access & Clearance Tiers
+     1: Document
+     2: policy_access_and_clearance
+     3: Owning team
+     4: Security
+     5: Status
+     6: APPROVED
+     7: Last reviewed
+     8: 2026-08-01
+     9: 1. Purpose
+    10: This policy defines the two clearance tiers used across Fenwick Cloud's internal documentation and tooling, and which staff hold each tier.
+    11: 2. Tier definitions
+    12: General-tier documents are visible to all engineering staff. Restricted-tier documents contain security-sensitive material -- credential handling, incident root causes involving unauthorized access, or details that could materially aid an attacker -- and are visible only to staff holding restricted clearance.
+    13: 3. Who holds restricted clearance
+    14: Restricted clearance is held by: every member of the Security team, regardless of title; and any engineer at Senior, Staff, or above title level, regardless of team. All other engineering staff hold general clearance.
+    15: Team / Title
+    16: Clearance tier
+    17: Security (any title)
+    18: Restricted
+    19: Senior / Staff title or above (any team)
+    20: Restricted
+    21: All engineers not meeting either condition above hold general clearance. The engineer roster's recorded clearance_tier field is provisioned by IT and is expected to match this rule; owning teams are responsible for flagging and correcting any roster entry that has drifted from it.
+    22: 4. Handling a restricted request from an unauthorized requester
+    23: State that a restricted document exists and that the requester lacks clearance to view it. Do not quote, paraphrase, or summarize its content. Direct the requester to the document's owning team if they need the information for an active incident.
+    24: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (13) ---
+    - Policy: Access & Clearance Tiers
+    - policy_access_and_clearance
+    - 1. Purpose
+    - This policy defines the two clearance tiers used across Fenwick Cloud's internal documentation and tooling, and which staff hold each tier.
+    - 2. Tier definitions
+    - General-tier documents are visible to all engineering staff. Restricted-tier documents contain security-sensitive material -- credential handling, incident root causes involving unauthorized access, o
+    - 3. Who holds restricted clearance
+    - Restricted clearance is held by: every member of the Security team, regardless of title; and any engineer at Senior, Staff, or above title level, regardless of team. All other engineering staff hold g
+    - Clearance tier
+    - Restricted
+    - All engineers not meeting either condition above hold general clearance. The engineer roster's recorded clearance_tier field is provisioned by IT and is expected to match this rule; owning teams are r
+    - 4. Handling a restricted request from an unauthorized requester
+    - State that a restricted document exists and that the requester lacks clearance to view it. Do not quote, paraphrase, or summarize its content. Direct the requester to the document's owning team if the
+
+======================================================================
+=== [policies] policy_oncall_rotation.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: UNMARKED
+
+  --- Full text extract (771 chars, 14 lines) ---
+     0: Policy: On-Call Rotation
+     1: Document
+     2: policy_oncall_rotation
+     3: Owning team
+     4: SRE
+     5: Status
+     6: APPROVED
+     7: Last reviewed
+     8: 2026-04-15
+     9: 1. Rotation cadence
+    10: Each active service has a weekly primary on-call engineer, drawn from the service's owning team. Deprecated services are wound down from the rotation once decommissioning begins; owning teams are responsible for removing a deprecated service's entries from the on-call tool.
+    11: 2. Acknowledgement SLA
+    12: SEV1: acknowledge within 5 minutes. SEV2: acknowledge within 15 minutes. SEV3: acknowledge within one business day.
+    13: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (5) ---
+    - Policy: On-Call Rotation
+    - policy_oncall_rotation
+    - 1. Rotation cadence
+    - 2. Acknowledgement SLA
+    - SEV1: acknowledge within 5 minutes. SEV2: acknowledge within 15 minutes. SEV3: acknowledge within one business day.
+
+======================================================================
+=== [postmortems] postmortem_auth_gateway_outage_DRAFT_superseded.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: MIXED_DRAFT_FINAL
+  ** MARKING: Contains RESTRICTED content
+  Owner hint: Security
+
+  --- Full text extract (1337 chars, 24 lines) ---
+     0: Postmortem: auth-gateway Outage (2026-03-14) — DRAFT
+     1: RESTRICTED — see policy_access_and_clearance.docx
+     2: Document
+     3: postmortem_auth_gateway_outage
+     4: Version
+     5: 1.0
+     6: Status
+     7: DRAFT / SUPERSEDED -- see v2.0 FINAL
+     8: Date
+     9: 2026-03-10
+    10: Owner
+    11: Security
+    12: 1. Summary
+    13: Preliminary write-up circulated during active investigation, before root cause was confirmed. Retained for audit history; superseded by the FINAL postmortem once investigation concluded.
+    14: 2. Impact
+    15: Impact figures not yet finalized at draft time; see FINAL postmortem for confirmed impact.
+    16: 3. Root cause
+    17: Preliminary hypothesis: a sudden spike in inbound traffic was misidentified by auth-gateway as a DDoS event, triggering rate-limiter logic that began rejecting legitimate requests. This hypothesis was under active verification at the time of this draft.
+    18: 4. Root cause summary
+    19: Root cause category
+    20: Preliminary hypothesis: traffic-spike-triggered rate-limiter failure (UNCONFIRMED -- see FINAL postmortem, which disproves this).
+    21: 5. Roles & responsibilities
+    22: Incident commander: on-call SRE. Communications: owning team lead. Follow-up owner: owning team engineering manager.
+    23: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (6) ---
+    - RESTRICTED — see policy_access_and_clearance.docx
+    - 1. Summary
+    - 2. Impact
+    - 3. Root cause
+    - 4. Root cause summary
+    - 5. Roles & responsibilities
+
+======================================================================
+=== [postmortems] postmortem_auth_gateway_outage_FINAL.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: MIXED_DRAFT_FINAL
+  ** MARKING: Contains RESTRICTED content
+  Owner hint: Security
+Supersedes
+postmortem
+
+  --- Full text extract (1840 chars, 26 lines) ---
+     0: Postmortem: auth-gateway Outage (2026-03-14)
+     1: RESTRICTED — see policy_access_and_clearance.docx
+     2: Document
+     3: postmortem_auth_gateway_outage
+     4: Version
+     5: 2.0
+     6: Status
+     7: FINAL / APPROVED
+     8: Date
+     9: 14 Mar 2026
+    10: Owner
+    11: Security
+    12: Supersedes
+    13: postmortem_auth_gateway_outage v1.0 (DRAFT, 2026-03-10) -- the v1.0 preliminary hypothesis was disproven during investigation and is retained for audit history only.
+    14: 1. Summary
+    15: auth-gateway rejected a growing share of otherwise-valid requests over a 90-minute window on 2026-03-14, escalated to SEV1 once downstream services began failing health checks.
+    16: 2. Impact
+    17: auth-gateway rejected ~35% of requests for 90 minutes, degrading every service behind it. The exposed credential was rotated and repository scanning for embedded credentials was added to CI.
+    18: 3. Root cause
+    19: Investigation traced the failure to a service-account credential that had been embedded directly in a configuration file committed to a shared repository. That credential was used to obtain broader access than intended, and the resulting anomalous access pattern triggered auth-gateway's internal protection logic, which began rejecting a growing share of legitimate traffic as a side effect. The v1.0 draft's traffic-spike/DDoS hypothesis was investigated and ruled out: request-rate telemetry for the window did not show the volume increase that hypothesis would require.
+    20: 4. Root cause summary
+    21: Root cause category
+    22: Committed service-account credential enabling unintended lateral access.
+    23: 5. Roles & responsibilities
+    24: Incident commander: on-call SRE. Communications: owning team lead. Follow-up owner: owning team engineering manager.
+    25: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (9) ---
+    - RESTRICTED — see policy_access_and_clearance.docx
+    - 1. Summary
+    - auth-gateway rejected a growing share of otherwise-valid requests over a 90-minute window on 2026-03-14, escalated to SEV1 once downstream services began failing health checks.
+    - 2. Impact
+    - 3. Root cause
+    - Investigation traced the failure to a service-account credential that had been embedded directly in a configuration file committed to a shared repository. That credential was used to obtain broader ac
+    - 4. Root cause summary
+    - Committed service-account credential enabling unintended lateral access.
+    - 5. Roles & responsibilities
+
+======================================================================
+=== [postmortems] postmortem_billing_worker_duplicate_charges.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: FINAL
+  Owner hint: Billing
+
+  --- Full text extract (1151 chars, 23 lines) ---
+     0: Postmortem: billing-worker Duplicate Settlement Charges
+     1: Document
+     2: postmortem_billing_worker_duplicate_charges
+     3: Version
+     4: 1.0
+     5: Status
+     6: FINAL / APPROVED
+     7: Date
+     8: 07/22/2026
+     9: Owner
+    10: Billing
+    11: 1. Summary
+    12: A batch of invoice settlements was submitted twice for 41 invoices after a network timeout caused the billing-worker's retry logic to resubmit the same settlement request.
+    13: 2. Impact
+    14: 41 invoices were double-charged; all were identified and refunded within 24 hours of detection.
+    15: 3. Root cause
+    16: The retry was issued without an idempotency key, so the downstream payment processor treated the retried request as a new charge rather than recognizing it as a duplicate of the original attempt.
+    17: 4. Root cause summary
+    18: Root cause category
+    19: Retry issued without an idempotency key on a network-timeout path.
+    20: 5. Roles & responsibilities
+    21: Incident commander: on-call SRE. Communications: owning team lead. Follow-up owner: owning team engineering manager.
+    22: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (5) ---
+    - 1. Summary
+    - 2. Impact
+    - 3. Root cause
+    - 4. Root cause summary
+    - 5. Roles & responsibilities
+
+======================================================================
+=== [postmortems] postmortem_payments_api_5xx_2026-06-11.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: FINAL
+  Owner hint: Payments
+
+  --- Full text extract (1101 chars, 23 lines) ---
+     0: Postmortem: payments-api Elevated 5xx (2026-06-11)
+     1: Document
+     2: postmortem_payments_api_5xx_2026-06-11
+     3: Version
+     4: 1.0
+     5: Status
+     6: FINAL / APPROVED
+     7: Date
+     8: 2026-06-11
+     9: Owner
+    10: Payments
+    11: 1. Summary
+    12: A deploy at 09:40 introduced a misconfigured connection-pool size, causing payments-api to exhaust database connections under normal traffic within 12 minutes, surfacing as elevated 5xx responses to callers.
+    13: 2. Impact
+    14: Approximately 4% of payment authorization requests failed for 18 minutes; no customer funds were double-charged or lost.
+    15: 3. Root cause
+    16: Rollback via fenctl restored the previous connection-pool configuration and resolved the issue within 6 minutes of rollback completion.
+    17: 4. Root cause summary
+    18: Root cause category
+    19: Deploy misconfiguration.
+    20: 5. Roles & responsibilities
+    21: Incident commander: on-call SRE. Communications: owning team lead. Follow-up owner: owning team engineering manager.
+    22: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (5) ---
+    - 1. Summary
+    - 2. Impact
+    - 3. Root cause
+    - 4. Root cause summary
+    - 5. Roles & responsibilities
+
+======================================================================
+=== [postmortems] postmortem_payments_api_canary_2026-09-04_DRAFT.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: DRAFT
+  Owner hint: Payments
+Related incident
+INC
+
+  --- Full text extract (1577 chars, 25 lines) ---
+     0: Postmortem (DRAFT): payments-api Canary 5xx (2026-09-04)
+     1: Document
+     2: postmortem_payments_api_canary_2026-09-04
+     3: Version
+     4: 0.1
+     5: Status
+     6: DRAFT -- pending final review
+     7: Date
+     8: 2026-09-04
+     9: Owner
+    10: Payments
+    11: Related incident
+    12: INC-2101 (open at time of writing)
+    13: 1. Summary
+    14: Today's payments-api deploy introduced a canary that began throwing elevated 5xx responses within 8 minutes of rollout. A rollback was initiated per runbook_rollback_payments_api.docx while investigation continued.
+    15: 2. Impact
+    16: Affected services: payments-api (primary), checkout-service (downstream, elevated retry volume during the window). Approximately 6% of payment authorization requests were affected before rollback completed.
+    17: 3. Root cause
+    18: Preliminary root cause: the canary build shipped with a lowered request-timeout default that was too aggressive for payments-api's p99 dependency latency to primary-db under normal load, causing a share of otherwise-healthy requests to time out and surface as 5xx. Confirmed by comparing the canary build's config diff against the previous stable release.
+    19: 4. Root cause summary
+    20: Root cause category
+    21: Overly aggressive request-timeout default shipped in a canary build.
+    22: 5. Roles & responsibilities
+    23: Incident commander: on-call SRE. Communications: owning team lead. Follow-up owner: Marisol Feng (FEN-1003) -- add a timeout-regression check to the canary gate.
+    24: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (5) ---
+    - 1. Summary
+    - 2. Impact
+    - 3. Root cause
+    - 4. Root cause summary
+    - 5. Roles & responsibilities
+
+======================================================================
+=== [postmortems] postmortem_search_index_reindex_lag_2026-08-02.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: FINAL
+  Owner hint: Platform
+
+  --- Full text extract (1249 chars, 23 lines) ---
+     0: Postmortem: search-index Reindex Lag Spike (2026-08-02)
+     1: Document
+     2: postmortem_search_index_reindex_lag_2026-08-02
+     3: Version
+     4: 1.0
+     5: Status
+     6: FINAL / APPROVED
+     7: Date
+     8: 08/02/2026
+     9: Owner
+    10: Platform
+    11: 1. Summary
+    12: A scheduled reindex job on search-index ran concurrently with an unrelated bulk-import job, causing query latency to climb for roughly 40 minutes before the reindex completed and latency self-recovered.
+    13: 2. Impact
+    14: Internal search latency (used by several engineering tools, not customer-facing) roughly tripled for 40 minutes; no customer-facing impact.
+    15: 3. Root cause
+    16: The reindex scheduler had no mutual-exclusion check against other bulk jobs touching the same index. Once the reindex job completed, index read latency returned to baseline without any manual intervention.
+    17: 4. Root cause summary
+    18: Root cause category
+    19: Scheduling gap -- no mutual exclusion between reindex and bulk-import jobs.
+    20: 5. Roles & responsibilities
+    21: Incident commander: on-call SRE. Communications: owning team lead. Follow-up owner: owning team engineering manager.
+    22: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (5) ---
+    - 1. Summary
+    - 2. Impact
+    - 3. Root cause
+    - 4. Root cause summary
+    - 5. Roles & responsibilities
+
+======================================================================
+=== [runbooks] payments_team_notes_rollback.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: UNMARKED
+
+  --- Full text extract (532 chars, 7 lines) ---
+     0: Payments Team Notes — Rollback Quick Reference
+     1: Internal team notes, kept by the Payments on-call rotation. Not an official runbook — just what we actually do.
+     2: Rollback
+     3: Same as always: fenctl rollback payments-api --to-last-stable. Works fine, don't overthink it.
+     4: Escalation
+     5: Heads up — we've been escalating after 3 minutes lately, not 10. Incident volume's been higher this quarter and waiting the full window before paging someone else in was costing us time on a couple of calls. Nobody's updated the official runbook yet.
+     6: — Priya
+
+  --- Extracted rules/requirements (1) ---
+    - Same as always: fenctl rollback payments-api --to-last-stable. Works fine, don't overthink it.
+
+======================================================================
+=== [runbooks] runbook_database_failover.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: UNMARKED
+
+  --- Full text extract (803 chars, 16 lines) ---
+     0: Runbook: primary-db Failover
+     1: Document
+     2: runbook_database_failover
+     3: Owning team
+     4: Platform
+     5: Status
+     6: APPROVED
+     7: Last reviewed
+     8: 2026-05-19
+     9: 1. Purpose
+    10: Failover procedure for primary-db, the shared relational datastore used by payments-api, billing-worker, checkout-service, and auth-gateway.
+    11: 2. Procedure
+    12: Promote the standby replica via the platform console, confirm replication lag was under 5 seconds at the time of promotion, and re-point dependent services' connection strings per their own service runbooks.
+    13: 3. Escalation
+    14: Escalate to the SRE on-call for primary-db immediately on trigger.
+    15: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (4) ---
+    - 1. Purpose
+    - 2. Procedure
+    - 3. Escalation
+    - Escalate to the SRE on-call for primary-db immediately on trigger.
+
+======================================================================
+=== [runbooks] runbook_oncall_escalation.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: UNMARKED
+
+  --- Full text extract (911 chars, 16 lines) ---
+     0: Runbook: On-Call Escalation
+     1: Document
+     2: runbook_oncall_escalation
+     3: Owning team
+     4: Platform / SRE
+     5: Status
+     6: APPROVED
+     7: Last reviewed
+     8: 2026-06-02
+     9: 1. When to escalate
+    10: Escalate any incident that a runbook's own escalation section points to, or any SEV1/SEV2 incident where the assigned on-call engineer has not acknowledged within 10 minutes.
+    11: 2. How to escalate
+    12: File a ticket in the Ops Escalation queue, tagged with the incident severity and the affected service. Include a link to the relevant runbook and a one-line statement of current impact.
+    13: 3. After escalation
+    14: The Ops Escalation queue pages the secondary on-call automatically for SEV1 tickets. SEV2/SEV3 tickets route to the team's normal queue.
+    15: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (5) ---
+    - 1. When to escalate
+    - Escalate any incident that a runbook's own escalation section points to, or any SEV1/SEV2 incident where the assigned on-call engineer has not acknowledged within 10 minutes.
+    - 2. How to escalate
+    - 3. After escalation
+    - The Ops Escalation queue pages the secondary on-call automatically for SEV1 tickets. SEV2/SEV3 tickets route to the team's normal queue.
+
+======================================================================
+=== [runbooks] runbook_rollback_billing_worker.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: UNMARKED
+
+  --- Full text extract (935 chars, 18 lines) ---
+     0: Runbook: billing-worker Rollback
+     1: Document
+     2: runbook_rollback_billing_worker
+     3: Owning team
+     4: Billing
+     5: Status
+     6: APPROVED
+     7: Last reviewed
+     8: 2026-07-28
+     9: 1. Purpose
+    10: Rollback procedure for billing-worker, the async settlement/invoicing worker.
+    11: 2. When to use this runbook
+    12: Use when a billing-worker deploy is suspected of causing settlement errors, duplicate charge submissions, or a spike in worker retry rate.
+    13: 3. Rollback procedure
+    14: Run: fenctl rollback billing-worker --to-last-stable, then drain the retry queue manually before resuming normal processing -- billing-worker does not auto-drain on rollback.
+    15: 4. Escalation
+    16: Escalate to the Billing on-call engineer if duplicate-charge symptoms persist after rollback and queue drain.
+    17: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (5) ---
+    - 1. Purpose
+    - 2. When to use this runbook
+    - 3. Rollback procedure
+    - 4. Escalation
+    - Escalate to the Billing on-call engineer if duplicate-charge symptoms persist after rollback and queue drain.
+
+======================================================================
+=== [runbooks] runbook_rollback_checkout_service.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: UNMARKED
+
+  --- Full text extract (1028 chars, 18 lines) ---
+     0: Runbook: checkout-service Rollback & Latency Triage
+     1: Document
+     2: runbook_rollback_checkout_service
+     3: Owning team
+     4: Payments
+     5: Status
+     6: APPROVED
+     7: Last reviewed
+     8: 2026-08-20
+     9: 1. Purpose
+    10: Covers the standard rollback and latency-triage procedure for checkout-service, the customer-facing checkout API that calls payments-api for authorization.
+    11: 2. First steps on a latency report
+    12: Check whether payments-api or a downstream dependency (fraud-detection-worker, primary-db) is elevated first -- checkout-service latency reports are more often a downstream symptom than a checkout-service-local problem.
+    13: 3. Rollback procedure
+    14: Run: fenctl rollback checkout-service --to-last-stable.
+    15: 4. Escalation
+    16: Escalate to the Payments on-call engineer if latency has not returned to baseline within 10 minutes of ruling out a downstream cause.
+    17: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (5) ---
+    - 1. Purpose
+    - 2. First steps on a latency report
+    - 3. Rollback procedure
+    - 4. Escalation
+    - Escalate to the Payments on-call engineer if latency has not returned to baseline within 10 minutes of ruling out a downstream cause.
+
+======================================================================
+=== [runbooks] runbook_rollback_payments_api.docx ===
+======================================================================
+  No tracked changes detected
+  Title from docProps: (none)
+  Status: UNMARKED
+
+  --- Full text extract (1304 chars, 20 lines) ---
+     0: Runbook: payments-api Rollback
+     1: Document
+     2: runbook_rollback_payments_api
+     3: Owning team
+     4: Payments
+     5: Status
+     6: APPROVED
+     7: Last reviewed
+     8: 2026-07-01
+     9: 1. Purpose
+    10: This runbook covers the standard rollback procedure for payments-api when a deploy introduces elevated error rates or a failed canary.
+    11: 2. When to use this runbook
+    12: Use this runbook when payments-api's 5xx rate exceeds the canary threshold within 30 minutes of a deploy, or when a manual investigation confirms the current deploy is the proximate cause of a service degradation.
+    13: 3. Rollback procedure
+    14: Run the following command from the deploy host, replacing the placeholder with the affected environment:
+    15: fenctl rollback payments-api --to-last-stable
+    16: This reverts payments-api to the last deploy marked stable in the release ledger. Confirm the rollback completed by checking that the 5xx rate returns to baseline within 5 minutes.
+    17: 4. Escalation
+    18: If the rollback does not resolve the elevated error rate within 10 minutes, escalate to the Payments on-call engineer for the current rotation, and open a ticket per runbook_oncall_escalation.
+    19: Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.
+
+  --- Extracted rules/requirements (5) ---
+    - 1. Purpose
+    - 2. When to use this runbook
+    - 3. Rollback procedure
+    - 4. Escalation
+    - If the rollback does not resolve the elevated error rate within 10 minutes, escalate to the Payments on-call engineer for the current rotation, and open a ticket per runbook_oncall_escalation.
+
+======================================================================
+=== SUMMARY ===
+======================================================================
+  runbooks/payments_team_notes_rollback.docx
+    Status: UNMARKED | Restricted: False | Tracked: False | Rules: 1 | Size: 532 chars
+  policies/policy_access_and_clearance.docx
+    Status: UNMARKED | Restricted: True | Tracked: False | Rules: 13 | Size: 1794 chars
+  policies/policy_oncall_rotation.docx
+    Status: UNMARKED | Restricted: False | Tracked: False | Rules: 5 | Size: 771 chars
+  postmortems/postmortem_auth_gateway_outage_DRAFT_superseded.docx
+    Status: MIXED_DRAFT_FINAL | Restricted: True | Tracked: False | Rules: 6 | Size: 1337 chars
+  postmortems/postmortem_auth_gateway_outage_FINAL.docx
+    Status: MIXED_DRAFT_FINAL | Restricted: True | Tracked: False | Rules: 9 | Size: 1840 chars
+  postmortems/postmortem_billing_worker_duplicate_charges.docx
+    Status: FINAL | Restricted: False | Tracked: False | Rules: 5 | Size: 1151 chars
+  postmortems/postmortem_payments_api_5xx_2026-06-11.docx
+    Status: FINAL | Restricted: False | Tracked: False | Rules: 5 | Size: 1101 chars
+  postmortems/postmortem_payments_api_canary_2026-09-04_DRAFT.docx
+    Status: DRAFT | Restricted: False | Tracked: False | Rules: 5 | Size: 1577 chars
+  postmortems/postmortem_search_index_reindex_lag_2026-08-02.docx
+    Status: FINAL | Restricted: False | Tracked: False | Rules: 5 | Size: 1249 chars
+  runbooks/runbook_database_failover.docx
+    Status: UNMARKED | Restricted: False | Tracked: False | Rules: 4 | Size: 803 chars
+  runbooks/runbook_oncall_escalation.docx
+    Status: UNMARKED | Restricted: False | Tracked: False | Rules: 5 | Size: 911 chars
+  runbooks/runbook_rollback_billing_worker.docx
+    Status: UNMARKED | Restricted: False | Tracked: False | Rules: 5 | Size: 935 chars
+  runbooks/runbook_rollback_checkout_service.docx
+    Status: UNMARKED | Restricted: False | Tracked: False | Rules: 5 | Size: 1028 chars
+  runbooks/runbook_rollback_payments_api.docx
+    Status: UNMARKED | Restricted: False | Tracked: False | Rules: 5 | Size: 1304 chars
+
+Total documents: 14
+Total rules extracted: 78
+Files saved to: /home/saikumar/projects/fenwick-opencode/scripts/discovery/../../docs/discovery/output/C12_docx_extracts/

@@ -1,0 +1,25 @@
+Source: runbooks/runbook_rollback_payments_api.docx
+Status: UNMARKED
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Runbook: payments-api Rollback
+Document
+runbook_rollback_payments_api
+Owning team
+Payments
+Status
+APPROVED
+Last reviewed
+2026-07-01
+1. Purpose
+This runbook covers the standard rollback procedure for payments-api when a deploy introduces elevated error rates or a failed canary.
+2. When to use this runbook
+Use this runbook when payments-api's 5xx rate exceeds the canary threshold within 30 minutes of a deploy, or when a manual investigation confirms the current deploy is the proximate cause of a service degradation.
+3. Rollback procedure
+Run the following command from the deploy host, replacing the placeholder with the affected environment:
+fenctl rollback payments-api --to-last-stable
+This reverts payments-api to the last deploy marked stable in the release ledger. Confirm the rollback completed by checking that the 5xx rate returns to baseline within 5 minutes.
+4. Escalation
+If the rollback does not resolve the elevated error rate within 10 minutes, escalate to the Payments on-call engineer for the current rotation, and open a ticket per runbook_oncall_escalation.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

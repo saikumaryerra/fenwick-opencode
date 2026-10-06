@@ -1,0 +1,28 @@
+Source: postmortems/postmortem_billing_worker_duplicate_charges.docx
+Status: FINAL
+Tracked changes: 0 ins, 0 del
+Title from metadata: (none)
+
+Postmortem: billing-worker Duplicate Settlement Charges
+Document
+postmortem_billing_worker_duplicate_charges
+Version
+1.0
+Status
+FINAL / APPROVED
+Date
+07/22/2026
+Owner
+Billing
+1. Summary
+A batch of invoice settlements was submitted twice for 41 invoices after a network timeout caused the billing-worker's retry logic to resubmit the same settlement request.
+2. Impact
+41 invoices were double-charged; all were identified and refunded within 24 hours of detection.
+3. Root cause
+The retry was issued without an idempotency key, so the downstream payment processor treated the retried request as a new charge rather than recognizing it as a duplicate of the original attempt.
+4. Root cause summary
+Root cause category
+Retry issued without an idempotency key on a network-timeout path.
+5. Roles & responsibilities
+Incident commander: on-call SRE. Communications: owning team lead. Follow-up owner: owning team engineering manager.
+Internal use only — Fenwick Cloud Engineering. This document is maintained by the owning team and reviewed on incident close-out or quarterly, whichever comes first. Report inaccuracies to the owning team's on-call channel.

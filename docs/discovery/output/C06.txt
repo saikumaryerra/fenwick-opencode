@@ -49,4 +49,4 @@ Rows: 25  |  Columns: 5 (ticket_id, filed_by, filed_at, text, related_incident_i
   Tickets with related_incident_id: 1/25
 
 === Profile complete ===
-  Timestamp: 2026-10-06 12:26
+  Timestamp: 2026-10-06 12:41
