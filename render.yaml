@@ -1,0 +1,17 @@
+# Render Blueprint: free Docker web service (Hugging Face Docker Spaces need PRO).
+services:
+  - name: fenwick-support-queue
+    type: web
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      # Route traffic to the port the Dockerfile binds (Render's default is 10000).
+      - key: PORT
+        value: "7860"
+      - key: GROQ_API_KEY
+        sync: false

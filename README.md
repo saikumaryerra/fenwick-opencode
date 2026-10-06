@@ -1,22 +1,9 @@
----
-title: Fenwick Support Queue
-emoji: 🎫
-colorFrom: blue
-colorTo: gray
-sdk: docker
-app_port: 7860
-pinned: false
-short_description: Fenwick Cloud engineering support queue (POST /tickets)
----
-
 # Fenwick Cloud — Engineering Support Queue
 
 A FastAPI service with one route, `POST /tickets`, that decides what happens to an
 engineering support ticket: answer it, route it, mark it a duplicate, decide an
 action, or refuse it. The build plan is in [BRIEFING.md](BRIEFING.md) and the
 design decisions behind it are in [docs/design/DECISIONS.md](docs/design/DECISIONS.md).
-
-The YAML block at the top of this file configures the Hugging Face Space.
 
 ## Run locally
 
@@ -60,26 +47,17 @@ docker build -t fenwick-support-queue .
 docker run --rm -p 7860:7860 --env-file .env fenwick-support-queue
 ```
 
-## Deploy to Hugging Face Spaces
+## Deploy (Render, free plan)
 
-The service runs as a Docker Space on port 7860.
+Hugging Face Docker Spaces now require a PRO plan, so the service runs on
+Render's free plan from [render.yaml](render.yaml).
 
-1. Log in with a token that has write access: `hf auth login`.
-2. Commit your changes, then deploy `HEAD`:
-   ```bash
-   HF_SPACE=<owner>/<space-name> scripts/deploy_hf_space.sh
-   ```
-   The script creates the Space if needed and uploads the committed tree only,
-   so untracked files such as `.env` are never published.
-3. In the Space, open **Settings → Variables and secrets** and add the secret
-   `GROQ_API_KEY` (and optionally the variable `GROQ_MODEL`). The Space restarts
-   to pick it up.
-4. Once the build finishes, the service is at `https://<owner>-<space-name>.hf.space`.
-   Confirm it answers before submitting:
-   ```bash
-   python -m eval.runner --url https://<owner>-<space-name>.hf.space
-   ```
+1. Open https://render.com/deploy?repo=https://github.com/saikumaryerra/fenwick-opencode
+   and sign in; Render reads `render.yaml` and creates the web service.
+2. Enter `GROQ_API_KEY` when prompted (leave blank to run rules-only).
+3. Pushes to `main` redeploy automatically.
+4. Check it: `python -m eval.runner --url https://<service>.onrender.com`
 
-Known limits of the free Space (DECISIONS Q1): it sleeps after 48 hours without
-traffic, so the first request after that waits for a cold start; ticket state is
-kept in memory and is lost whenever the Space restarts.
+Known limits of the free plan: the service sleeps after 15 minutes without
+traffic and the next request waits about a minute for it to start; ticket state
+is kept in memory and is lost on every restart or sleep.
