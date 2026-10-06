@@ -9,3 +9,6 @@ Turn 8 | adapters | done (6 adapters + orchestrator + step tracker + 60 failure-
 Turn 9 | request flow + POST /tickets | done (main.py, 3 bug fixes during scenario test, 240 tests pass) | next: state/store + eval cases
 Turn 10 | API-level tests | done (50 new tests: contract shape, per-kind §6, external failures/timeouts, adversarial access, follow-ups, invalid input; fixed 2 code bugs in classifier guard + orchestrator timeout outcomes; 290 total pass) | next: state/store + eval cases
 Turn 11 | eval framework | done (eval/cases.py: 33 cases; eval/runner.py: in-process or URL, per-case checks, §9 bars, JSON+MD output) | next: state/store + eval results in ARTEFACT.md
+Turn 15 | docs | done (docs/DATA_DISCOVERY.md; 7 build-vs-findings departures recorded in §5) | next: APPROACH.md
+Turn 16 | docs | done (APPROACH.md; two author placeholders left) | next: ARTEFACT.md
+Turn 17 | docs | done (ARTEFACT.md; docs/dq_report.txt generated from scripts/dq_report.py) | next: author fills placeholders; re-run eval at submitted commit; resolve section-5 departures

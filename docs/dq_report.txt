@@ -1,0 +1,90 @@
+============================================================
+DATA QUALITY REPORT — Computed from data pack
+============================================================
+
+[F-04] CSV file count: 5 (expected: 5)
+
+--- engineer_roster.csv ---
+  Rows: 14
+  Teams: {'Payments': 3, 'Billing': 3, 'Platform': 3, 'Security': 2, 'SRE': 3}
+  Clearance disagreements (computed vs trusted): 3
+  Details:
+    FEN-1002 (Owen Baptiste): computed=general, roster=restricted
+    FEN-1013 (Ravi Deshpande): computed=restricted, roster=general
+    FEN-1014 (Wren Castellano): computed=restricted, roster=general
+
+--- service_registry.csv ---
+  Rows: 10
+  Active: 9, Deprecated: 1
+  Service name normalization examples:
+
+--- oncall_schedule.csv ---
+  Rows: 15
+  Unique raw service names: 11
+    'Payments-API' -> normalized: 'payments-api'
+    'auth_gateway' -> normalized: 'auth-gateway'
+    'billing-sync' -> normalized: 'billing-sync'
+    'billing-worker' -> normalized: 'billing-worker'
+    'checkout-service' -> normalized: 'checkout-service'
+    'edge-gateway' -> normalized: 'edge-gateway'
+    'fraud-detection-worker' -> normalized: 'fraud-detection-worker'
+    'notifications-worker' -> normalized: 'notifications-worker'
+    'payments-api' -> normalized: 'payments-api'
+    'primary-db' -> normalized: 'primary-db'
+    'search-index' -> normalized: 'search-index'
+  Deprecated services with on-call entries: 1
+    notifications-worker: ['FEN-1014', 'FEN-1013']
+  SRE engineers on-call (F-07): 4 entries
+
+--- incident_log.csv ---
+  Rows: 50000
+  Open: 494, Resolved: 49506
+  Incident IDs: 6 short (INC-NNNN), 49994 long (INC-NNNNNN)
+  Date format distribution:
+    DD Mon YYYY: 16666
+    ISO date (YYYY-MM-DD): 16668
+    MM/DD/YYYY: 16666
+  Unparseable dates: 0
+  Update entries: 496
+  Update timestamps parsed: 496, unparsed: 0
+
+--- open_tickets.csv (5th CSV, F-04) ---
+  Rows: 25
+  With linked incident: 1, Without: 24
+
+--- Documents (F-09 — discovered by scanning store) ---
+  Total .docx files: 14
+  By category: {'policies': 2, 'postmortems': 6, 'runbooks': 6}
+  Restricted by category: {'postmortems': 2}
+  Draft documents: 2 (postmortem_auth_gateway_outage_DRAFT_superseded.docx, postmortem_payments_api_canary_2026-09-04_DRAFT.docx)
+  Superseded documents: 1 (postmortem_auth_gateway_outage_DRAFT_superseded.docx)
+  Document families: 13
+    payments_team_notes_rollback: payments_team_notes_rollback.docx
+    policy_access_and_clearance: policy_access_and_clearance.docx
+    policy_oncall_rotation: policy_oncall_rotation.docx
+    postmortem_auth_gateway_outage: postmortem_auth_gateway_outage_DRAFT_superseded.docx, postmortem_auth_gateway_outage_FINAL.docx
+    postmortem_billing_worker_duplicate_charges: postmortem_billing_worker_duplicate_charges.docx
+    postmortem_payments_api_5xx_2026-06-11: postmortem_payments_api_5xx_2026-06-11.docx
+    postmortem_payments_api_canary_2026-09-04: postmortem_payments_api_canary_2026-09-04_DRAFT.docx
+    postmortem_search_index_reindex_lag_2026-08-02: postmortem_search_index_reindex_lag_2026-08-02.docx
+    runbook_database_failover: runbook_database_failover.docx
+    runbook_oncall_escalation: runbook_oncall_escalation.docx
+    runbook_rollback_billing_worker: runbook_rollback_billing_worker.docx
+    runbook_rollback_checkout_service: runbook_rollback_checkout_service.docx
+    runbook_rollback_payments_api: runbook_rollback_payments_api.docx
+  Postmortem docs in CSV links: 4
+  Postmortem files on disk: 6
+  Orphan postmortems (not in CSV): 2
+    postmortem_auth_gateway_outage_DRAFT_superseded.docx
+    postmortem_payments_api_canary_2026-09-04_DRAFT.docx
+
+--- Escalation Timing (F-06 — designed, not built) ---
+  SEV1: 5 minutes (escalation-runbook)
+  SEV2: 10 minutes
+  SEV3: 1 business day
+  Policy (default): 15 minutes
+  Payments service conflict: 3 minutes
+
+============================================================
+END REPORT
+============================================================
